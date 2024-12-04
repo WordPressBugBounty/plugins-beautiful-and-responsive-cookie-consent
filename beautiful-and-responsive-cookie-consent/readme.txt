@@ -2,10 +2,10 @@
 Tags: cookie consent, cookie banner, cookie consent banner, gdpr, google consent mode v2
 Requires at least: 4.0
 Donate link: https://www.paypal.me/nikelschubert/6.00EUR
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.3.0
+Stable tag: 4.3.1
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -36,13 +36,9 @@ See the list of all features and get the add-on: [beautiful-cookie-banner.com](h
 
 
 = These cookies are set by this plugin =
-You can customize the cookie name, though.
 
-- **cookieconsent_status** -> stores the user setting, if cookies are allowed or not. If you choose "differentiated consent" it stores, if the user closed the banner.
-- **cookieconsent*status*{cookiesuffix}** -> only set in case of "differentiated consent". It stores the user setting for the cookie group. One cookie for each group is set.
-- **nsc_bar_cs_done** -> set if you activate ITP Protection (use backend cookies). Stores the information of when the cookie was set, to give them a duration.
-  = Localstorage is used =
-  If you have the premium add on and activate the stats module and activate the banner open counter, then a counter is written to localstorage. The key is "beautiful_cookie_banner_open_counter".
+See the list cookies and localStorage used: [Cookies used by Cookie Banner](https://beautiful-cookie-banner.com/documentation/cookies-used-by-cookie-banner-plugin/)
+
 
 = Features =
 
@@ -119,6 +115,11 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.3.1 =
+
+- Fix: Resolved an issue where initial differentiated consent occasionally failed to produce the correct results for consent mode.
+- Refactor: Introduced groundwork to further decouple the premium plugin from the standard plugin, enhancing modularity.
 
 = 4.3.0 =
 

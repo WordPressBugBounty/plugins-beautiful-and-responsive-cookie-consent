@@ -148,7 +148,10 @@ class nsc_bar_frontend
         $banner_init_script_dependencies = array();
         $banner_init_script_dependencies = apply_filters('nsc_bar_filter_banner_init_dependencies', $banner_init_script_dependencies);
 
-        wp_register_script('nsc_bar_nice-cookie-consent_js', $this->plugin_url . 'public/cookieNSCconsent.min.js', $banner_init_script_dependencies, NSC_BAR_VERSION, true);
+        $bannerOneUrl = $this->plugin_url . 'public/cookieNSCconsent.min.js';
+        $bannerOneUrl = apply_filters('nsc_bar_filter_banner_one_url', $bannerOneUrl);
+        wp_register_script('nsc_bar_nice-cookie-consent_js', $bannerOneUrl, $banner_init_script_dependencies, NSC_BAR_VERSION, true);
+
         $eventListener = 'window.addEventListener("load"';
         $additonalCheck = "";
         if ($this->improveBannerLoadingSpeed === "1") {

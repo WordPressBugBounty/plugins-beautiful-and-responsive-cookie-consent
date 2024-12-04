@@ -73,7 +73,8 @@ class nsc_bar_input_validation
             "hr" => array(
                 "class" => array(),
                 "id" => array(),
-            ));
+            )
+        );
     }
 
     public function nsc_bar_validate_field_custom_save($tabfield, $input)
