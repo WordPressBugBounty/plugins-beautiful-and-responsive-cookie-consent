@@ -87,7 +87,7 @@ $allowed_html = array(
         if ($premiumAddonInstalled === false) {
             echo '<script>localStorage.setItem("nscBaraCookieBannerState",JSON.stringify(' . $fallbackStateNewBanner . '));</script>';
         }
-        echo '<script>addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_new_banner");}); </script><iframe width="100%" id="nsc_bar_new_banner" src="' . NSC_BAR_PLUGIN_URL . 'admin/new-banner/index.html?plugin_url_encoded=' . urlencode(NSC_BAR_PLUGIN_URL) . '&rest_url_encoded=' . $rest_url . '&wp_nonce=' . $nonce . '&cb=' . NSC_BAR_VERSION . '"></iframe>';
+        echo '<script>addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_new_banner");}); </script><iframe width="100%" id="nsc_bar_new_banner" src="' . NSC_BAR_PLUGIN_URL . 'admin/new-banner/index.html?plugin_url_encoded=' . urlencode(NSC_BAR_PLUGIN_URL) . '&rest_url_encoded=' . $rest_url . '&wp_nonce=' . $nonce . '&cb=' . NSC_BAR_PLUGIN_VERSION . '"></iframe>';
     }
 
     ?>

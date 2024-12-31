@@ -20,34 +20,26 @@ class nsc_bar_html_formfields
         switch ($this->field->type) {
             case "checkbox":
                 return $this->create_checkbox();
-                break;
             case "textarea":
                 return $this->create_textarea();
-                break;
             case "text":
                 return $this->create_text();
-                break;
             case "longtext":
                 return $this->create_text("long");
-                break;
             case "extralongtext":
                 return $this->create_text("extralong");
-                break;
             case "select":
                 return $this->create_select();
-                break;
             case "radio":
                 return $this->create_radio();
-                break;
             case "hidden":
                 return $this->create_hidden_field();
-                break;
             case "masked":
                 return $this->create_masked_field();
-                break;
+            case "multiselect":
+                return $this->create_multiselect();
             default:
                 return esc_attr($this->field->pre_selected_value);
-                break;
         }
     }
 
@@ -109,11 +101,26 @@ class nsc_bar_html_formfields
         $html = '<select ' . $this->nsc_bar_is_disabled($this->field) . ' name="' . $this->escFieldName . '" id="' . $this->escFieldId . '">';
         foreach ($this->field->selectable_values as $selectable_value) {
             $select = "";
-            if ($selectable_value->value == $this->field->pre_selected_value) {$select = "selected";}
+            if ($selectable_value->value == $this->field->pre_selected_value) {
+                $select = "selected";
+            }
             $html .= '<option value="' . esc_attr($selectable_value->value) . '" ' . $select . '>' . esc_html($selectable_value->name) . '</option>';
         }
         $html .= "</select>";
         return '<label>' . $html . '</label>';
+    }
+
+    private function create_multiselect()
+    {
+
+        $html = '
+        <input type="hidden" data-glue="' . $this->field->glue . '" data-noselectiontext="' . $this->field->no_selection_text . '" id="' . $this->escFieldId . '" name="' . $this->escFieldName . '_hidden" value="' . esc_attr($this->convert_to_string($this->field->pre_selected_value)) . '"/>
+        <div class="dropdown">
+        <div class="form-control dropdown-input w-100" id="multiSelectDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="' . $this->escFieldId . '_ms_selected_values" class="d-inline-block"></span>
+        </div>
+        <ul id="' . $this->escFieldId . '_ms_list" class="dropdown-menu w-100" aria-labelledby="multiSelectDropdown"></ul></div>'; // filled by JS
+        return $html;
     }
 
     private function create_radio()
@@ -121,7 +128,9 @@ class nsc_bar_html_formfields
         $html = "";
         foreach ($this->field->selectable_values as $selectable_value) {
             $select = "";
-            if ($selectable_value->value == $this->field->pre_selected_value) {$select = "checked";}
+            if ($selectable_value->value == $this->field->pre_selected_value) {
+                $select = "checked";
+            }
             $html .= '<input ' . $this->nsc_bar_is_disabled($this->field) . ' id="' . $this->escFieldId . '"  type="radio" name="' . $this->escFieldName . '" value="' . esc_attr($selectable_value->value) . '" ' . $select . ' > ' . esc_html($selectable_value->name) . ' ';
         }
         return '<label>' . $html . '</label>';

@@ -628,10 +628,28 @@
         ]
       },
       {
-        "tabname": "Google Consent Mode",
+        "tabname": "Consent Mode",
         "tab_description": "premium_addon_desc.html",
         "tab_tipps": "",
         "tab_slug": "googleconsentmode",
+        "internal_tabs": [
+          {
+            "id": "googleconsentmode",
+            "name": "Google Consent Mode",
+            "fields": [
+              "activateConsentMode",
+              "consentModeConfig",
+              "coMoAdsDataRedaction",
+              "coMoUrlPassThrough",
+              "consentModeWaitForUpdate"
+            ]
+          },
+          {
+            "id": "msconsentmode",
+            "name": "Microsoft Consent Mode",
+            "fields": ["microsoftUETconsentMode", "microsoftClarityEnabled", "microsoftClarityAllowedCats"]
+          }
+        ],
         "active": false,
         "tabfields": [
           {
@@ -641,8 +659,8 @@
             "required": false,
             "extra_validation_name": false,
             "pre_selected_value": false,
-            "helpertext": "Get premium add-on to enable. If enabled, Google and UET Consent Mode infos are pushed into the dataLayer. As soon as it is enabled all categories will be pushed with 'denied', if no option is checked.",
-            "name": "Enable Consent mode",
+            "helpertext": "Get premium add-on to enable. If enabled, Google, Microsoft Clarity and UET Consent Mode infos are pushed into the dataLayer. As soon as it is enabled all categories will be pushed with 'denied', if no option is checked.",
+            "name": "Enable Google Consent mode",
             "disabled": true,
             "save_in_db": false
           },
@@ -705,6 +723,33 @@
             "name": "Use ad_storage for Microsoft UET consent mode, too",
             "disabled": true,
             "save_in_db": true
+          },
+          {
+            "field_slug": "microsoftClarityEnabled",
+            "type": "checkbox",
+            "save_as": "boolean",
+            "required": false,
+            "extra_validation_name": false,
+            "pre_selected_value": false,
+            "helpertext": "Get premium add-on to enable. When checked you can select the the categories for which you want to set the consent for Microsoft Clarity. If nothing is checked, the consent will be set to 'false'.",
+            "name": "Enable Claritiy Cookie Consent API",
+            "disabled": true,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "microsoftClarityAllowedCats",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "Clarity cookies (window.clarity('consent')) will be enabled, if the user opts in to one of the selected categories.",
+            "name": "Microsoft Clarity allowed for",
+            "disabled": true,
+            "save_in_db": false
           }
         ]
       },
@@ -966,7 +1011,7 @@
       },
       {
         "tabname": "Statistics",
-        "tab_description": "<h2>You can save statistic locally in a logfile or send them to GA4. To activate please get the premium add-on: <a target='_blank' href='https://beautiful-cookie-banner.com/'>https://beautiful-cookie-banner.com/</a>.</h2>",
+        "tab_description": "<div class='nsc_bar_notice_premium_addon_hint py-4 px-3 mt-2'>You can save statistic locally in a logfile or send them to GA4. To activate please get the premium add-on: <a target='_blank' href='https://beautiful-cookie-banner.com/'>beautiful-cookie-banner.com</a>.</div>",
         "tab_tipps": "",
         "tab_slug": "statistics",
         "active": false,

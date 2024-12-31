@@ -185,6 +185,7 @@ function addCookieTableToPage(idValue, idTable, cookieSuffixNeeded, name) {
       let table = document.createElement('table');
 
       table.classList.add(idTable);
+      table.classList.add('my-2');
       table.id = idTable;
 
       table = generateTableHead(table);
@@ -195,6 +196,7 @@ function addCookieTableToPage(idValue, idTable, cookieSuffixNeeded, name) {
         let row = tbody.insertRow();
         Object.keys(cookietype_fields).forEach(function (field_key) {
           let cell = row.insertCell();
+          cell.classList.add('text-center');
           let input_field = create_form(cookietype_fields[field_key], field_key);
           cell.setAttribute('data-colname', input_field.placeholder);
           cell.appendChild(input_field);
@@ -215,6 +217,7 @@ function addCookieTableToPage(idValue, idTable, cookieSuffixNeeded, name) {
       let row = thead.insertRow();
       Object.keys(tableConfig).forEach(function (field_key) {
         let th = document.createElement('th');
+        th.classList.add('text-center');
         let text = document.createTextNode(tableConfig[field_key].headline);
         th.appendChild(text);
         row.appendChild(th);
@@ -261,6 +264,7 @@ function addCookieTableToPage(idValue, idTable, cookieSuffixNeeded, name) {
       input_field.name = 'nsc_bar_' + field_key;
       input_field.value = value;
       input_field.classList.add('nsc_bar_' + field_key);
+      input_field.classList.add('mt-2');
       input_field.setAttribute('data-field_key', field_key);
       var field_config = tableConfig[input_field.getAttribute('data-field_key')];
       input_field.placeholder = field_config.headline;
@@ -324,6 +328,7 @@ function addCookieTableToPage(idValue, idTable, cookieSuffixNeeded, name) {
       var first = true;
       Object.keys(tableConfig).forEach(function (field_key) {
         let cell = row.insertCell();
+        cell.classList.add('text-center');
         let input_field = create_form('', field_key);
         if (field_key === 'delete_icon') {
           input_field.style.cursor = 'pointer';

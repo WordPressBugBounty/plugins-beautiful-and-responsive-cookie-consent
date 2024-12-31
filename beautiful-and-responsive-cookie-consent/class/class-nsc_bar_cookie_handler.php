@@ -27,7 +27,7 @@ class nsc_bar_cookie_handler
 
             if (isset($_COOKIE[$this->cookie_configs['name']])) {
                 $this->set_cookie($this->cookie_configs['name'], stripslashes($_COOKIE[$this->cookie_configs['name']]), $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure']);
-                $this->set_cookie(ITP_SAVER_COOKIE_NAME, $this->cookie_configs['name'] . "---_---" . $expiryDate, $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure'], true);
+                $this->set_cookie("nsc_bar_cs_done", $this->cookie_configs['name'] . "---_---" . $expiryDate, $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure'], true);
             }
 
             if (!empty($this->cookie_configs['cookietypes']) && !empty($cookietype_configs["cookie_suffix"])) {
@@ -158,9 +158,9 @@ class nsc_bar_cookie_handler
             unset($_COOKIE[$this->cookie_configs['name']]);
             $this->set_cookie($this->cookie_configs['name'], "emptyvalue", time() - 3600, $this->cookie_configs['path'], $this->cookie_configs['domain']);
             //delete itp saver cookie as well, if cookie is deleted
-            if (isset($_COOKIE[ITP_SAVER_COOKIE_NAME])) {
-                unset($_COOKIE[ITP_SAVER_COOKIE_NAME]);
-                $this->set_cookie(ITP_SAVER_COOKIE_NAME, "emptyvalue", time() - 3600, $this->cookie_configs['path'], $this->cookie_configs['domain']);
+            if (isset($_COOKIE["nsc_bar_cs_done"])) {
+                unset($_COOKIE["nsc_bar_cs_done"]);
+                $this->set_cookie("nsc_bar_cs_done", "emptyvalue", time() - 3600, $this->cookie_configs['path'], $this->cookie_configs['domain']);
             }
 
         }
@@ -191,12 +191,12 @@ class nsc_bar_cookie_handler
     {
         $expiryDate = time() + 60 * 60 * 24 * $expiryDays;
 
-        if (!isset($_COOKIE[ITP_SAVER_COOKIE_NAME])) {
+        if (!isset($_COOKIE["nsc_bar_cs_done"])) {
             return $expiryDate;
         }
 
         $input_validation = new nsc_bar_input_validation();
-        $expiryCookie = $input_validation->nsc_bar_sanitize_input($_COOKIE[ITP_SAVER_COOKIE_NAME]);
+        $expiryCookie = $input_validation->nsc_bar_sanitize_input($_COOKIE["nsc_bar_cs_done"]);
         $done_cookie_values = explode("---_---", $expiryCookie);
 
         if (count($done_cookie_values) != 2) {

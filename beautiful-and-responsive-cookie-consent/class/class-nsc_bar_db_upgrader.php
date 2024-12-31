@@ -50,7 +50,7 @@ class nsc_bar_db_upgrader
         }
 
         if ($save) {
-            return $banner_configs->nsc_bar_save_banner_settings("xx");
+            return $banner_configs->nsc_bar_save_banner_settings();
         } else {
             return true;
         }

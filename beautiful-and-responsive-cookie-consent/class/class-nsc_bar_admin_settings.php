@@ -32,22 +32,24 @@ class nsc_bar_admin_settings
   public function nsc_bar_enqueue_script_on_admin_page($hook)
   {
     if ($hook == 'settings_page_nsc_bar-cookie-consent') {
-      wp_enqueue_script('nsc_bar_cookietypes_js', NSC_BAR_PLUGIN_URL . 'admin/js/cookietypes.v2.js', array(), NSC_BAR_VERSION);
-      wp_enqueue_script('nsc_bara_admin_iframeresizerjs', NSC_BAR_PLUGIN_URL . 'admin/js/iframeResizer/iframeResizer.min.js', array(), NSC_BAR_VERSION, true);
-      wp_register_script('nsc_bar_consentmode_js', NSC_BAR_PLUGIN_URL . 'admin/js/admin.consentmode.min.js', array(), NSC_BAR_VERSION);
+      wp_enqueue_script('nsc_bar_cookietypes_js', NSC_BAR_PLUGIN_URL . 'admin/js/cookietypes.v2.js', array(), NSC_BAR_PLUGIN_VERSION);
+      wp_enqueue_script('nsc_bara_admin_iframeresizerjs', NSC_BAR_PLUGIN_URL . 'admin/js/iframeResizer/iframeResizer.min.js', array(), NSC_BAR_PLUGIN_VERSION, true);
+      wp_enqueue_script('nsc_bar_bootstrap_js', NSC_BAR_PLUGIN_URL . 'admin/js/bootstrap.bundle.min.js', array(), NSC_BAR_PLUGIN_VERSION);
+      wp_register_script('nsc_bar_admin_js', NSC_BAR_PLUGIN_URL . 'admin/js/admin.cookie-banner.min.js', array(), NSC_BAR_PLUGIN_VERSION);
       wp_add_inline_script(
-        'nsc_bar_consentmode_js',
+        'nsc_bar_admin_js',
         'var nscBarAdminJsVars = {"restURL": "' . esc_js(get_rest_url()) . '","nonce":"' . esc_js(wp_create_nonce('wp_rest')) . '"};',
         'before'
       );
-      wp_enqueue_script('nsc_bar_consentmode_js');
+      wp_enqueue_script('nsc_bar_admin_js');
     }
   }
 
   public function nsc_bar_enqueue_styles_on_admin_page($hook)
   {
     if ($hook == 'settings_page_nsc_bar-cookie-consent') {
-      wp_enqueue_style('nsc_bar_admin_styles', NSC_BAR_PLUGIN_URL . 'admin/css/nsc_bar_admin.css', array(), NSC_BAR_VERSION);
+      wp_enqueue_style('nsc_bar_bootstrap_styles', NSC_BAR_PLUGIN_URL . 'admin/css/bootstrap.min.css', array(), NSC_BAR_PLUGIN_VERSION);
+      wp_enqueue_style('nsc_bar_admin_styles', NSC_BAR_PLUGIN_URL . 'admin/css/nsc_bar_admin.css', array(), NSC_BAR_PLUGIN_VERSION);
     }
   }
 

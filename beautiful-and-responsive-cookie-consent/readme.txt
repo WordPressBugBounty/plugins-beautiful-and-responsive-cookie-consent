@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/nikelschubert/6.00EUR
 Tested up to: 6.7
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.3.1
+Stable tag: 4.4.0
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -26,6 +26,7 @@ A free and beautiful way to get a Cookie Banner without loading any external res
 
 - Google Consent Mode v2, including new ad_personalization and ad_user_data, see here: [Google Consent Mode v2 for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/google-consent-mode-v2-implementation-example/)
 - Microsoft UET consent mode support. [Microsoft UET consent mode for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/microsoft-uet-consent-mode-for-wordpress/)
+- Microsoft Clarity Consent API support upcoming in January 2025. [Microsoft Clarity API support for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/microsoft-clarity-consent-api-support-wordpress/)
 - Auto block scripts and requests
 - Multilanguage support
 - Full Google Tag Manager integration: load GTM through this plugin.
@@ -115,6 +116,14 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.4.0 =
+
+- NEW: premium add-on support for Microsoft clarity.
+- REFACTOR: removed obsolete constant NSC_BAR_VERSION
+- REFACTOR: renamed admin js file
+- REFACTOR: added return filter class
+- REFACTOR: Admin UI slightly nicer
 
 = 4.3.1 =
 

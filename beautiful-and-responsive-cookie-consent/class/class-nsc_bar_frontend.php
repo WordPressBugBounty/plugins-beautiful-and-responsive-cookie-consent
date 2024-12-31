@@ -34,6 +34,14 @@ class nsc_bar_frontend
         $this->improveBannerLoadingSpeed = false;
     }
 
+    public function getCookieName()
+    {
+        if (empty($this->cookie_name)) {
+            $this->cookie_name = $this->plugin_configs->getConsentCookieName();
+        }
+        return $this->cookie_name;
+    }
+
     public function nsc_bar_set_json_configs($nsc_bar_banner_config)
     {
         $message = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("content_message", false);
@@ -44,7 +52,7 @@ class nsc_bar_frontend
         $this->customized_font = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("customizedFont", false);
         $this->improveBannerLoadingSpeed = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("improveBannerLoadingSpeed", false);
         $this->cookietypes = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("cookietypes", array());
-        $this->cookie_name = $this->plugin_configs->getConsentCookieName();
+        $this->cookie_name = $this->getCookieName();
         $this->compliance_type = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("type", $this->plugin_configs->nsc_bar_return_settings_field_default_value("type"));
         $this->dataLayerName = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("dataLayerName", $this->plugin_configs->nsc_bar_return_settings_field_default_value("dataLayerName"));
         $this->container = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("container", false);
@@ -70,6 +78,26 @@ class nsc_bar_frontend
         $this->nsc_bar_get_dataLayer_banner_init_script(false);
     }
 
+    public function nsc_bar_get_user_consent_values()
+    {
+        $config_cookie_name = $this->plugin_configs->getConsentCookieName();
+        $rawValues = $this->nsc_bar_get_dataLayer_banner_init_script(true);
+
+        $userSelects = array();
+        foreach ($rawValues as $dlCookieName => $cookieValue) {
+            if ($dlCookieName === $config_cookie_name) {
+                $userSelects[] = $cookieValue;
+                continue;
+            }
+
+            if ($cookieValue === "allow") {
+                $userSelects[] = str_replace($config_cookie_name . "_", "", $dlCookieName);
+            }
+
+        }
+        return $userSelects;
+    }
+
     public function nsc_bar_get_dataLayer_banner_init_script($returnValue)
     {
 
@@ -79,7 +107,7 @@ class nsc_bar_frontend
             return;
         }
 
-        $this->cookie_name = $this->plugin_configs->getConsentCookieName();
+        $this->cookie_name = $this->getCookieName();
         $this->compliance_type = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("type", $this->plugin_configs->nsc_bar_return_settings_field_default_value("type"));
 
         if ($this->compliance_type !== "newBanner") {
@@ -89,7 +117,7 @@ class nsc_bar_frontend
 
         if ($this->compliance_type === "newBanner") {
             $cookieHandler = new nsc_bar_cookie_handler();
-            $cookieValue = $cookieHandler->nsc_bar_get_cookies_by_name($this->cookie_name);
+            $cookieValue = $cookieHandler->nsc_bar_get_cookies_by_name($this->getCookieName());
             $cookies = apply_filters('nsc_bar_user_choice_new_banner', "", $cookieValue);
         }
 
@@ -101,7 +129,7 @@ class nsc_bar_frontend
         if (empty($returnValue)) {
             $this->dataLayerName = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("dataLayerName", $this->plugin_configs->nsc_bar_return_settings_field_default_value("dataLayerName"));
             echo "<script id='nsc_bar_get_dataLayer_banner_init_script' nowprocket data-pagespeed-no-defer data-cfasync data-no-optimize='1' data-no-defer='1' type='text/javascript'>";
-            echo '!function(e,o,n,s){const c=' . json_encode($this->escape_cookies($cookies), JSON_UNESCAPED_UNICODE) . ',i="' . esc_js($this->dataLayerName) . '",t=Object.keys(c),a={event:"beautiful_cookie_consent_initialized"};for(let e=0;e<t.length;e++)a[t[e]]=d(t[e],"' . esc_js($this->compliance_type) . '")||c[t[e]].defaultValue,"dismiss"===a[t[e]]&&(a[t[e]]="allow");function d(e,o){if("newBanner"!==o)return l(e);let n=l("' . esc_js($this->cookie_name) . '");return n?(n=decodeURIComponent(n),n?(n=JSON.parse(n),n?!0===n.categories.includes(e)?"allow":"deny":(console.warn("cookie not found 3"),!1)):(console.warn("cookie not found 2"),!1)):(console.warn("cookie not found 1"),!1)}function l(e){return document.cookie.match("(^|;)\\\s*"+e+"\\\s*=\\\s*([^;]+)")?.pop()||""}window[i]=window[i]||[],window[i].push(a)}();';
+            echo '!function(e,o,n,s){const c=' . json_encode($this->escape_cookies($cookies), JSON_UNESCAPED_UNICODE) . ',i="' . esc_js($this->dataLayerName) . '",t=Object.keys(c),a={event:"beautiful_cookie_consent_initialized"};for(let e=0;e<t.length;e++)a[t[e]]=d(t[e],"' . esc_js($this->compliance_type) . '")||c[t[e]].defaultValue,"dismiss"===a[t[e]]&&(a[t[e]]="allow");function d(e,o){if("newBanner"!==o)return l(e);let n=l("' . esc_js($this->getCookieName()) . '");return n?(n=decodeURIComponent(n),n?(n=JSON.parse(n),n?!0===n.categories.includes(e)?"allow":"deny":(console.warn("cookie not found 3"),!1)):(console.warn("cookie not found 2"),!1)):(console.warn("cookie not found 1"),!1)}function l(e){return document.cookie.match("(^|;)\\\s*"+e+"\\\s*=\\\s*([^;]+)")?.pop()||""}window[i]=window[i]||[],window[i].push(a)}();';
             echo "</script>";
             return;
         }
@@ -139,7 +167,7 @@ class nsc_bar_frontend
 
     public function nsc_bar_enqueue_scripts_osano()
     {
-        wp_register_style('nsc_bar_nice-cookie-consent', $this->plugin_url . 'public/cookieNSCconsent.min.css', array(), NSC_BAR_VERSION);
+        wp_register_style('nsc_bar_nice-cookie-consent', $this->plugin_url . 'public/cookieNSCconsent.min.css', array(), NSC_BAR_PLUGIN_VERSION);
         if (!empty($this->customized_font)) {
             wp_add_inline_style('nsc_bar_nice-cookie-consent', '.cc-window { font-family: ' . str_replace("&#039;", "'", esc_html($this->customized_font)) . '}');
         }
@@ -150,7 +178,7 @@ class nsc_bar_frontend
 
         $bannerOneUrl = $this->plugin_url . 'public/cookieNSCconsent.min.js';
         $bannerOneUrl = apply_filters('nsc_bar_filter_banner_one_url', $bannerOneUrl);
-        wp_register_script('nsc_bar_nice-cookie-consent_js', $bannerOneUrl, $banner_init_script_dependencies, NSC_BAR_VERSION, true);
+        wp_register_script('nsc_bar_nice-cookie-consent_js', $bannerOneUrl, $banner_init_script_dependencies, NSC_BAR_PLUGIN_VERSION, true);
 
         $eventListener = 'window.addEventListener("load"';
         $additonalCheck = "";
@@ -226,7 +254,7 @@ class nsc_bar_frontend
         $cookieHandler = new nsc_bar_cookie_handler();
         $dataLayerEntries = array();
 
-        $dataLayerEntries["cookieconsent_status"] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($this->cookie_name), "defaultValue" => $this->calculate_default_consent_setting());
+        $dataLayerEntries["cookieconsent_status"] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($this->getCookieName()), "defaultValue" => $this->calculate_default_consent_setting());
 
         if ($this->compliance_type !== "detailed" && $this->compliance_type !== "detailedRev" && $this->compliance_type !== "detailedRevDeny") {
             return $dataLayerEntries;
@@ -240,7 +268,7 @@ class nsc_bar_frontend
 
         $numberOfCookies = count($this->cookietypes);
         for ($i = 0; $i < $numberOfCookies; $i++) {
-            $cookie_name = $this->cookie_name . "_" . $this->cookietypes[$i]["cookie_suffix"];
+            $cookie_name = $this->getCookieName() . "_" . $this->cookietypes[$i]["cookie_suffix"];
             $dataLayerEntries["cookieconsent_status_" . $this->cookietypes[$i]["cookie_suffix"]] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($cookie_name), "defaultValue" => $this->calculate_default_consent_setting($this->cookietypes[$i]));
         }
 

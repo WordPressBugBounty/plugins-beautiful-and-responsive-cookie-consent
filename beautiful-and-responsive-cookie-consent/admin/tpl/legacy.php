@@ -44,13 +44,27 @@
   <?php echo "<div class='tab_description'>" . wp_kses($objSettings->setting_page_fields->tabs[$active_tab_index]->tab_description, $allowed_html) . "  </div>" ?>
 
   <form action="" method="post">
-
     <?php wp_nonce_field("save_cookie_settings_" . $objSettings->plugin_slug . "--" . $objSettings->setting_page_fields->tabs[$active_tab_index]->tab_slug, 'nsc_bar_nonce'); ?>
     <input type="hidden" name="action" value="nsc_bar_cookie_settings_save" />
     <input type="hidden" name="option_page"
       value="<?php echo $objSettings->plugin_slug . $objSettings->setting_page_fields->tabs[$active_tab_index]->tab_slug ?>" />
-    <?php submit_button(); ?>
+    <?php
+    $activeInternalTab = 0;
+    $display = '';
+    submit_button(); ?>
 
+    <?php if (empty($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs) === false) {
+      $tabs = '<ul class="nav nav-underline">';
+      foreach ($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs as $key => $internal_tab) {
+        $active = $key === $activeInternalTab ? 'active' : '';
+        $tabs .= '<li id="' . $internal_tab->id . '_tab" data-target="' . esc_html(implode(",", $internal_tab->fields)) . '" class="nav-item nsc_bar_internal_tab">
+          <a data-includedids="' . esc_html(implode(",", $internal_tab->fields)) . '" id="' . $internal_tab->id . '_tab_link" class="nav-link ' . $active . '" aria-current="page">' . $internal_tab->name . '</a>
+        </li>';
+      }
+      $tabs .= '</ul>';
+      echo $tabs;
+    }
+    ?>
     <table class="form-table">
       <?php foreach ($objSettings->setting_page_fields->tabs[$active_tab_index]->tabfields as $field_configs) {
         if ($newBannerEnabled === true && isset($field_configs->newBanner) && $field_configs->newBanner === false) {
@@ -61,7 +75,15 @@
           continue;
         }
         ?>
-        <tr id="tr_<?php echo esc_attr($field_configs->field_slug) ?>">
+        <?php
+        $tabbedRow = "nsc_bar_non_tabbed_row";
+        if (empty($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs) === false) {
+          foreach ($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs as $intTab) {
+            $tabbedRow = in_array($field_configs->field_slug, $intTab->fields) ? 'nsc_bar_tabbed_row' : $tabbedRow;
+          }
+        }
+        ?>
+        <tr id="tr_<?php echo esc_attr($field_configs->field_slug) ?>" class="<?php echo $tabbedRow; ?>">
           <th scope="row">
             <?php echo esc_html($field_configs->name) ?>
           </th>

@@ -1,3 +1,13 @@
+body {
+  background: #f0f0f1;
+  color: #3c434a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue',
+    sans-serif;
+  font-size: 13px;
+  line-height: 1.4em;
+  min-width: 600px;
+}
+
 #nsc_bar_admin_title {
   background: url('../img/icon-96x96.png') no-repeat left center;
   background-size: 48px 48px;
@@ -10,8 +20,6 @@
   border: 1px solid #c3c4c7;
   border-left-width: 4px;
   box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
-  margin: 5px 15px 2px;
-  padding: 1px 12px;
   border-left: 4px solid #dba617;
 }
 
@@ -20,8 +28,6 @@
   border: 1px solid #c3c4c7;
   border-left-width: 4px;
   box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
-  margin: 8px 0px 2px;
-  padding: 1px 12px;
   border-left: 8px solid #0037ff;
 }
 
@@ -197,19 +203,6 @@ input.nsc_bar_inline_error {
   font-style: italic;
 }
 
-#nsc_bar_helper_text_consent_mode {
-  padding-top: 25px;
-}
-
-.nsc_bar_helper_text_consent_mode_cell svg {
-  float: inline-start;
-  padding-right: 10px;
-}
-
-#comoComplianceType {
-  font-weight: 800;
-}
-
 .nsc_bar_new_banner_selector-text {
   vertical-align: top;
   text-align: left;
@@ -233,4 +226,47 @@ input.nsc_bar_inline_error {
 
 .tab_description p {
   font-size: 14px;
+}
+
+.multiselect-dropdown-input {
+  outline: none;
+  background-color: #fff !important;
+  cursor: pointer;
+}
+
+.nsc_bar_internal_tab {
+  cursor: pointer;
+}
+
+.nsc_bar_element_disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.form-check-input:checked {
+  background-color: transparent;
+  border-color: #0d6efd;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 14px;
+  color: #333;
+  background-color: #cfe2ff;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chip .close-btn {
+  padding-left: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.chip .close-btn:hover {
+  color: #000;
 }
