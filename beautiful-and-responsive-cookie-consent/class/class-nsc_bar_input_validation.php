@@ -115,6 +115,9 @@ class nsc_bar_input_validation
             case "nsc_bar_text_only":
                 $return = $this->nsc_bar_text_only($return);
                 break;
+            case "customConsentButtons":
+                $return = $this->customConsentButtons($return);
+                break;
         }
         $return = apply_filters('nsc_bar_filter_input_validation', $return, $extra_validation_value);
         return $return;
@@ -232,6 +235,19 @@ class nsc_bar_input_validation
         }
 
         return $tested_json_string;
+    }
+
+    public function customConsentButtons($input)
+    {
+        if (is_string($input) === false) {
+            return null;
+        }
+
+        $expectedEmptyString = str_replace(array("{{deny}}", "{{savesettings}}", "{{allowall}}", " ", ",", ";"), "", $input);
+        if (empty($expectedEmptyString) === false) {
+            return null;
+        }
+        return str_replace(array(" ", ",", ";"), "", $input);
     }
 
     public function nsc_bar_check_cookietypes($input)

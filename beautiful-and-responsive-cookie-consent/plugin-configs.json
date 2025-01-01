@@ -501,6 +501,17 @@
             "save_in_db": false
           },
           {
+            "field_slug": "customOrderConsentButtons",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "customConsentButtons",
+            "pre_selected_value": "{{deny}}{{savesettings}}{{allowall}}",
+            "helpertext": "You can change the oder of the buttons here. Use the placeholders {{deny}}, {{savesettings}} and {{allowall}}.",
+            "name": "Order of consent buttons",
+            "save_in_db": false
+          },
+          {
             "field_slug": "infoClickStatus",
             "type": "select",
             "save_as": "string",

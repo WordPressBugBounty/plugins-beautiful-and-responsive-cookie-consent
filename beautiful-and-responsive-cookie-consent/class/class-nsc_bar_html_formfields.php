@@ -90,8 +90,7 @@ class nsc_bar_html_formfields
     {
         $size = 50;
         $maxLength = 200;
-        $showLast = 5;
-        $maskedValue = "****-****-*****-" . substr($this->field->pre_selected_value, -5);
+        $maskedValue = empty(esc_attr($this->field->pre_selected_value)) ? "" : "****-****-*****-" . substr($this->field->pre_selected_value, -5);
         return '<label><input ' . $this->nsc_bar_is_disabled($this->field) . ' type="text"  id="' . $this->escFieldId . '" name="' . $this->escFieldName . '" size="' . $size . '" maxlength="' . $maxLength . '" value="' . esc_attr($maskedValue) . '"></label>';
     }
 
