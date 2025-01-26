@@ -464,7 +464,6 @@
         "tab_tipps": "tab_compliance_and_behaviour.html",
         "tab_slug": "compliance_type",
         "active": false,
-        "newBanner": false,
         "tabfields": [
           {
             "field_slug": "type",
@@ -498,7 +497,8 @@
             "pre_selected_value": "info",
             "helpertext": "If you use 'Differentiated Consent', 'Opt-in' or 'Opt-out' you must make sure, that all plugins and features of your site respect that setting. More info see documentation. The user settings can be read from the cookie set by this plugin or the dataLayer.",
             "name": "Compliance Type",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "customOrderConsentButtons",
@@ -509,7 +509,8 @@
             "pre_selected_value": "{{deny}}{{savesettings}}{{allowall}}",
             "helpertext": "You can change the oder of the buttons here. Use the placeholders {{deny}}, {{savesettings}} and {{allowall}}.",
             "name": "Order of consent buttons",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "infoClickStatus",
@@ -522,7 +523,8 @@
             "helpertext": "Set the consent status, if the user clicks on the one button. With default setting the value in the cookie will be dismiss, in the dataLayer 'allow'. To use this feature please get the premium add-on: <a target='_blank' href='https://beautiful-cookie-banner.com/'>https://beautiful-cookie-banner.com/</a>.",
             "name": "Status for button click.",
             "disabled": true,
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "cookietypes",
@@ -533,7 +535,8 @@
             "pre_selected_value": "",
             "helpertext": "Specify the different cookie types. Cookie Suffix: each cookie type gets an own cookie to save the acceptance status. The name is '<cookiename>'_'cookie suffix'.",
             "name": "Cookie Types",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "makeButtonsEqual",
@@ -544,7 +547,8 @@
             "pre_selected_value": false,
             "helpertext": "Per default the button which sets the highest consent is highlighted, this can be considered as dark pattern. For some regulations it is neccesary, that both have an equal weight. When ticking this box, they have same size and color.",
             "name": "Make the buttons look equal",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "buttonOrderAllowFirst",
@@ -556,6 +560,7 @@
             "helpertext": "Default the banner is prepended to document.body. Here you change this to append. Needed for example, if you find the banner text in the search engine results, instead of the page content. To use this feature please get the premium add-on: <a target='_blank' href='https://beautiful-cookie-banner.com/'>https://beautiful-cookie-banner.com/</a>.",
             "name": "Button 'allow' first",
             "save_in_db": false,
+            "newBanner": false,
             "disabled": true
           },
           {
@@ -567,7 +572,8 @@
             "pre_selected_value": false,
             "helpertext": "Only for 'Differentiated Consent': It might be useful to have the configured default setting on first page view in a cookie, before any user interaction. Depending on your compliance requirements, it might be a legal issue.",
             "name": "Set cookies with default values on 1st page view",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "dismissOnScroll",
@@ -578,7 +584,8 @@
             "pre_selected_value": "",
             "helpertext": "To disable, leave empty. To enable, set to the number of pixels a user must scroll vertically in order to trigger the dismiss.",
             "name": "Allow on scroll",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "dismissOnTimeout",
@@ -589,7 +596,8 @@
             "pre_selected_value": "",
             "helpertext": "To disable, leave empty. To enable set value as time in milliseconds to autodismiss after set time.",
             "name": "Allow on timeout (ms)",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "delayBannerShow",
@@ -601,7 +609,8 @@
             "helpertext": "To use this feature please get the premium add-on: <a target='_blank' href='https://beautiful-cookie-banner.com/'>https://beautiful-cookie-banner.com/</a>.",
             "name": "Delay show banner (ms)",
             "disabled": true,
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "onPopupClose",
@@ -612,7 +621,8 @@
             "pre_selected_value": false,
             "helpertext": "Not working in admin preview! Only in frontend. <strong>If you use the Google Tag Manager integration this might not be necessary, check the tab 'Google Tag Manager'</strong>. Depending on your tracking set up, you might need a reload of the page after an opt in to track the page on which the user opted in. Useful when auto block is enabled, too.",
             "name": "Reload after Bannerclick",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           },
           {
             "field_slug": "ask_until_acceptance",
@@ -623,7 +633,8 @@
             "pre_selected_value": false,
             "helpertext": "If checked and the user declines the usage of cookies, the banner will be shown on the next page load again, until he accepts. In case of 'Differentiated consent' the user must accept all cookie types.",
             "name": "Ask until acceptance",
-            "save_in_db": true
+            "save_in_db": true,
+            "newBanner": false
           },
           {
             "field_slug": "disableWithiniFrames",
@@ -634,7 +645,8 @@
             "pre_selected_value": "0",
             "helpertext": "Disable the banner, if the page is loaded in an iFrame.",
             "name": "Disable in iFrames",
-            "save_in_db": false
+            "save_in_db": false,
+            "newBanner": false
           }
         ]
       },

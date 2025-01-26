@@ -29,6 +29,10 @@ class nsc_bar_save_form_fields
             return false;
         }
 
+        if (isset($_POST['action']) === false || $_POST['action'] !== "nsc_bar_cookie_settings_save") {
+            return false;
+        }
+
         $currentTab = isset($_GET['tab']) ? $_GET['tab'] : "general";
         $action = "save_cookie_settings_" . $this->plugin_settings->plugin_slug . "--" . $currentTab;
         check_admin_referer($action, 'nsc_bar_nonce');
@@ -97,10 +101,6 @@ class nsc_bar_save_form_fields
         }
 
         $validate->return_errors_obj()->nsc_bar_display_errors();
-
-        if (class_exists(\LiteSpeed\Purge::class)) {
-            \LiteSpeed\Purge::purge_all();
-        }
 
         if ($banner_settings_updated === true || $configs_updated === true) {
             return true;
