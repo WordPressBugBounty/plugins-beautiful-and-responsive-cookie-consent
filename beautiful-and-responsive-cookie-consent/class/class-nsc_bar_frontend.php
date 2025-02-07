@@ -217,6 +217,7 @@ class nsc_bar_frontend
 
         $json_config_string_with_js = $this->json_config_string;
         $json_config_string_with_js = apply_filters('nsc_bar_filter_json_config_string_before_js', $json_config_string_with_js);
+        $json_config_string_with_js = $validator->escape_json_content($json_config_string_with_js);
 
         if (!empty($this->container)) {
             $setContainerPosition = '"container": document.querySelector("' . esc_js($this->container) . '")';

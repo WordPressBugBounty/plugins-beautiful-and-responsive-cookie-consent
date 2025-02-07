@@ -302,7 +302,7 @@ class nsc_bar_input_validation
         return $input;
     }
 
-    public function esc_array_for_js($array_to_escape)
+    public function esc_array_for_js(array $array_to_escape)
     {
         $escapedArray = array();
         foreach ($array_to_escape as $key => $value) {
@@ -321,6 +321,31 @@ class nsc_bar_input_validation
             }
         }
         return $escapedArray;
+    }
+
+    public function escape_json_content(string $json_string)
+    {
+        $decoded_json = json_decode($json_string, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return false;
+        }
+
+        function escape_recursive($data)
+        {
+            if (is_array($data)) {
+                foreach ($data as $key => $value) {
+                    $data[$key] = escape_recursive($value);
+                }
+            } elseif (is_string($data)) {
+                $data = esc_js($data);
+            }
+            return $data;
+        }
+
+        $escaped_json = escape_recursive($decoded_json);
+
+        return json_encode($escaped_json, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
 
     public function return_errors_obj()
