@@ -331,11 +331,15 @@ class nsc_bar_input_validation
             return false;
         }
 
-        function escape_recursive($data)
+        function escape_recursive($data, $allowedHtml)
         {
             if (is_array($data)) {
                 foreach ($data as $key => $value) {
-                    $data[$key] = escape_recursive($value);
+                    if ($key === "message" && is_string($value) === true) {
+                        $data[$key] = wp_kses($value, $allowedHtml);
+                        continue;
+                    }
+                    $data[$key] = escape_recursive($value, $allowedHtml);
                 }
             } elseif (is_string($data)) {
                 $data = esc_js($data);
@@ -343,7 +347,7 @@ class nsc_bar_input_validation
             return $data;
         }
 
-        $escaped_json = escape_recursive($decoded_json);
+        $escaped_json = escape_recursive($decoded_json, $this->allowedHtml);
 
         return json_encode($escaped_json, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
