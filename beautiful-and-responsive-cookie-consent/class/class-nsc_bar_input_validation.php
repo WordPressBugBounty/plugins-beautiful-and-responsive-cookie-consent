@@ -342,14 +342,14 @@ class nsc_bar_input_validation
                     $data[$key] = escape_recursive($value, $allowedHtml);
                 }
             } elseif (is_string($data)) {
-                $data = esc_js($data);
+                $data = stripslashes(esc_js($data));
             }
             return $data;
         }
 
         $escaped_json = escape_recursive($decoded_json, $this->allowedHtml);
 
-        return json_encode($escaped_json, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        return json_encode($escaped_json, JSON_UNESCAPED_UNICODE);
     }
 
     public function return_errors_obj()

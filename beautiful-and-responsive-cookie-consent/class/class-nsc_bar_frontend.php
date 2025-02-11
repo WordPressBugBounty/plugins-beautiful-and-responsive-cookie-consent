@@ -8,7 +8,6 @@ class nsc_bar_frontend
 
     private $json_config_string;
     private $plugin_url;
-    private $active_tab;
     private $plugin_configs;
     private $customized_font;
     private $cookietypes;
@@ -23,7 +22,6 @@ class nsc_bar_frontend
     public function __construct()
     {
         $this->plugin_url = NSC_BAR_PLUGIN_URL;
-        $this->active_tab = "";
         $this->plugin_configs = new nsc_bar_plugin_configs();
         $this->customized_font = false;
         $this->cookietypes = array();
@@ -212,7 +210,6 @@ class nsc_bar_frontend
     public function nsc_bar_json_with_js_function()
     {
         $validator = new nsc_bar_input_validation();
-        $cleanedCookieTypes = $validator->esc_array_for_js($this->cookietypes);
         $popUpCloseJsFunction = '"onPopupClose": function(){location.reload();}';
 
         $json_config_string_with_js = $this->json_config_string;
