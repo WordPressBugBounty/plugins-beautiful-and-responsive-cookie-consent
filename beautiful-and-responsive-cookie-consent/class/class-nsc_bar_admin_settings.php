@@ -38,7 +38,7 @@ class nsc_bar_admin_settings
       wp_register_script('nsc_bar_admin_js', NSC_BAR_PLUGIN_URL . 'admin/js/admin.cookie-banner.min.js', array(), NSC_BAR_PLUGIN_VERSION);
       wp_add_inline_script(
         'nsc_bar_admin_js',
-        'var nscBarAdminJsVars = {"restURL": "' . esc_js(get_rest_url()) . '","nonce":"' . esc_js(wp_create_nonce('wp_rest')) . '"};',
+        'window.nscBarAdminJsVars = {"restURL": "' . esc_js(get_rest_url()) . '","nonce":"' . esc_js(wp_create_nonce('wp_rest')) . '"};',
         'before'
       );
       wp_enqueue_script('nsc_bar_admin_js');
