@@ -84,8 +84,8 @@ class nsc_bar_input_validation
             return $tabfield->pre_selected_value;
         }
 
-        $return = $this->nsc_bar_sanitize_input($input);
         $extra_validation_value = $tabfield->extra_validation_name;
+        $return = $this->nsc_bar_sanitize_input($input, $extra_validation_value);
 
         switch ($extra_validation_value) {
             case "nsc_bar_check_input_color_code":
@@ -123,10 +123,14 @@ class nsc_bar_input_validation
         return $return;
     }
 
-    public function nsc_bar_sanitize_input($input)
+    public function nsc_bar_sanitize_input($input, $validationRule = "")
     {
-        $cleandValue = stripslashes($input);
+        $jsonRules = array("nsc_bar_check_valid_json_string", "nsc_bar_check_input_export_json_string", "nsc_bara_new_banner_config");
 
+        $cleandValue = $input;
+        if (in_array($validationRule, $jsonRules) === false) {
+            $cleandValue = stripslashes($input);
+        }
         // for backward compatibility
         if (getType($cleandValue) !== "string") {
             return sanitize_text_field($cleandValue);
@@ -135,7 +139,10 @@ class nsc_bar_input_validation
         // customized. Got from WP function _sanitize_text_fields
 
         $cleandValue = wp_check_invalid_utf8($cleandValue);
-        $cleandValue = wp_kses($cleandValue, $this->allowedHtml);
+
+        if (in_array($validationRule, $jsonRules) === false) {
+            $cleandValue = wp_kses($cleandValue, $this->allowedHtml);
+        }
         $cleandValue = preg_replace('/[\r\n\t ]+/', ' ', $cleandValue);
         $cleandValue = trim($cleandValue);
 
@@ -154,18 +161,68 @@ class nsc_bar_input_validation
         return $cleandValue;
     }
 
-    public function nsc_bar_link_input($input)
+    public function nsc_bar_link_input($url)
     {
-        $urlToTest = trim($input);
-        if (stripos($urlToTest, 'http') === false) {
-            $urlToTest = "https://d.com/" . ltrim($input, "/");
-        }
-
-        if (filter_var($urlToTest, FILTER_VALIDATE_URL) === false) {
+        if (!is_string($url)) {
             return null;
         }
 
-        return trim($input);
+        $url = trim($url);
+        if ('' === $url) {
+            return null;
+        }
+
+        $parts = parse_url($url);
+        if ($parts === false) {
+            return null;
+        }
+
+        if (empty($parts['scheme']) || empty($parts['host'])) {
+            $parts['scheme'] = "https";
+            $parts['host'] = "test.com";
+        }
+
+        $scheme = strtolower($parts['scheme']);
+        if (!in_array($scheme, array('http', 'https'), true)) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid url. Yours seems to be missing http or https.");
+            return null;
+        }
+
+        if (!function_exists('idn_to_ascii')) {
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid url.");
+                return null;
+            }
+            return trim($url);
+        }
+
+        $host_ascii = idn_to_ascii($parts['host'], 0, INTL_IDNA_VARIANT_UTS46);
+        if ($host_ascii === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid url. Yours seems to contain invalid chars.");
+            return null;
+        }
+
+        $normalized_url = $scheme . '://' . $host_ascii;
+        if (isset($parts['port'])) {
+            $normalized_url .= ':' . $parts['port'];
+        }
+
+        if (isset($parts['path'])) {
+            $normalized_url .= $this->encode_non_ascii($parts['path']);
+        }
+
+        if (isset($parts['query'])) {
+            $normalized_url .= '?' . $this->encode_non_ascii($parts['query']);
+        }
+
+        if (isset($parts['fragment'])) {
+            $normalized_url .= '#' . $this->encode_non_ascii($parts['fragment']);
+        }
+        if (filter_var($normalized_url, FILTER_VALIDATE_URL) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid url. Yours seems to contain invalid chars or something else went wrong.");
+            return null;
+        }
+        return $url;
     }
 
     public function nsc_bar_text_only($input)
@@ -174,6 +231,7 @@ class nsc_bar_input_validation
         $forbidden_chars = preg_match_all($forbidden, $input);
 
         if (empty($forbidden_chars) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Text could not be saved. Please provide only word characters in this field, space, - and . are allowed, too.");
             return null;
         }
 
@@ -199,10 +257,9 @@ class nsc_bar_input_validation
     {
         $valid = preg_match("/^[0-9]*$/", $input);
         if (empty($valid) && $input != "") {
-            $this->admin_error_obj->nsc_bar_set_admin_error("Number could not be saved. Please provide an integer. Your input: " . $input);
-            $input = null;
+            $this->admin_error_obj->nsc_bar_set_admin_error("Number could not be saved. Please provide an integer. Your input: " . esc_html($input));
+            return null;
         }
-        $this->admin_error_obj->nsc_bar_display_errors();
         return $input;
     }
 
@@ -211,6 +268,7 @@ class nsc_bar_input_validation
         $forbidden = "/[^\w^,^\.^ ^%^(^)^#]/";
         $forbidden_chars = preg_match_all($forbidden, $input);
         if (empty($forbidden_chars) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide valid color value for the color field, like #ffffff or rgba(100,100,100,0.9)");
             return null;
         }
         return $input;
@@ -224,27 +282,35 @@ class nsc_bar_input_validation
     public function nsc_bar_check_valid_json_string($json_string)
     {
         if (is_numeric($json_string) === true || $json_string === true) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid json string. Seems you provided booleanlike data. Data was not saved.");
             return null;
         }
 
-        $tested_json_string = json_encode(json_decode($json_string), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (is_string($json_string) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid json STRING. Your provided a non-string. Data was not saved.");
+            return null;
+        }
 
-        if (empty($tested_json_string) || $tested_json_string == "null") {
+        $tested_json_string = json_encode(json_decode($json_string), JSON_UNESCAPED_UNICODE);
+
+        if (empty($tested_json_string) || $tested_json_string === "null") {
             $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid json string. Data was not saved.");
             return null;
         }
 
-        return $tested_json_string;
+        return $json_string;
     }
 
     public function customConsentButtons($input)
     {
         if (is_string($input) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a string for the order of buttons. Data was not saved.");
             return null;
         }
 
         $expectedEmptyString = str_replace(array("{{deny}}", "{{savesettings}}", "{{allowall}}", " ", ",", ";"), "", $input);
         if (empty($expectedEmptyString) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide valid configuration for this field. Only {{deny}}, {{savesettings}} and {{allowall}} are allowed.");
             return null;
         }
         return str_replace(array(" ", ",", ";"), "", $input);
@@ -262,7 +328,6 @@ class nsc_bar_input_validation
 
         $valid = $this->nsc_bar_check_valid_json_string($input);
         if (empty($valid)) {
-            $this->admin_error_obj->nsc_bar_display_errors();
             return null;
         }
 
@@ -288,7 +353,6 @@ class nsc_bar_input_validation
 
         $valid = $this->nsc_bar_check_valid_json_string($input);
         if (empty($valid)) {
-            $this->admin_error_obj->nsc_bar_display_errors();
             return null;
         }
 
@@ -296,7 +360,7 @@ class nsc_bar_input_validation
         $valid = $this->nsc_bar_check_cookietypes(json_encode($settings->cookietypes, JSON_UNESCAPED_UNICODE));
 
         if (empty($valid)) {
-            $this->admin_error_obj->nsc_bar_display_errors();
+            $this->admin_error_obj->nsc_bar_set_admin_error("Please provide a valid json string with valid cookie types.");
             return null;
         }
         return $input;
@@ -355,6 +419,17 @@ class nsc_bar_input_validation
     public function return_errors_obj()
     {
         return $this->admin_error_obj;
+    }
+
+    private function encode_non_ascii($string)
+    {
+        return preg_replace_callback(
+            '/[^\x00-\x7F]/',
+            function ($match) {
+                return rawurlencode($match[0]);
+            },
+            $string
+        );
     }
 
 }

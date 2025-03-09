@@ -41,10 +41,13 @@ class nsc_bar_save_form_fields
             return false;
         }
 
-        $updated = $this->save_settings(null);
+        $validate = new nsc_bar_input_validation;
+        $updated = $this->save_settings(null, $validate);
         $saved_language_configs = $this->banner_configs_obj->nsc_bar_get_banner_config_array();
-        $this->override_other_addon_configs($updated, $saved_language_configs);
+        $this->override_other_addon_configs($updated, $saved_language_configs, $validate);
         //needed for testing
+        $validate->return_errors_obj()->nsc_bar_display_errors();
+
         return $saved_language_configs;
     }
 
@@ -53,11 +56,14 @@ class nsc_bar_save_form_fields
         foreach ($settings as $setting) {
             $_POST[$setting["option_name"]] = $setting["option_value"];
         }
-        $this->save_settings(null);
+
+        $validate = new nsc_bar_input_validation;
+        $this->save_settings(null, $validate);
+        $validate->return_errors_obj()->nsc_bar_display_errors();
         return $this->updated_fields;
     }
 
-    private function save_settings($addon_settings)
+    private function save_settings($addon_settings, $validate)
     {
         // just to make sure.
         if (current_user_can(esc_attr($this->plugin_settings->settings_page_configs->capability)) === false) {
@@ -66,7 +72,6 @@ class nsc_bar_save_form_fields
 
         $tabs = $this->plugin_settings->setting_page_fields->tabs;
         $plugin_prefix = $this->plugin_settings->plugin_prefix;
-        $validate = new nsc_bar_input_validation;
         $banner_settings_updated = false;
         $configs_updated = false;
 
@@ -100,8 +105,6 @@ class nsc_bar_save_form_fields
             $this->banner_configs_obj->nsc_bar_save_banner_settings();
         }
 
-        $validate->return_errors_obj()->nsc_bar_display_errors();
-
         if ($banner_settings_updated === true || $configs_updated === true) {
             return true;
         }
@@ -111,7 +114,7 @@ class nsc_bar_save_form_fields
 
     // TODO: to save different languages with API you need to do some changes here. Here is the magic what saves different json language string.
     // alternative: when doing an api call just adding the other languages to the plugin config.
-    private function override_other_addon_configs($updated, $saved_language_configs)
+    private function override_other_addon_configs($updated, $saved_language_configs, $validate)
     {
         if (class_exists("nsc_bara_save_form_fields_addon") !== true) {
             return false;
@@ -129,9 +132,8 @@ class nsc_bar_save_form_fields
             $this->banner_configs_obj->nsc_bar_set_banner_config_array($language_config);
             // to know where to save
             $this->banner_configs_obj->nsc_bar_set_banner_configs_slug($bara_banner_configs->nsc_bara_get_banner_settings_slug($addon_settings));
-            $this->save_settings($addon_settings);
+            $this->save_settings($addon_settings, $validate);
         }
-
     }
 
     private function value_save_manager($tabfield, $tabfield_slug, $addon_settings)
