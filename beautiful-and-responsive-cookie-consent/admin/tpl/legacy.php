@@ -24,7 +24,7 @@
     </div>
   <?php }
   if ($newBannerEnabled === false) {
-    ?>
+  ?>
     <table class="form-table nsc_bar_language">
       <tbody>
         <tr id="tr_content_language_setter">
@@ -51,14 +51,17 @@
     <?php
     $activeInternalTab = 0;
     $display = '';
-    submit_button(); ?>
+    submit_button();
+    $dnone = "";
+    ?>
 
     <?php if (empty($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs) === false) {
+      $dnone = "d-none";
       $tabs = '<ul class="nav nav-underline">';
       foreach ($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs as $key => $internal_tab) {
         $active = $key === $activeInternalTab ? 'active' : '';
-        $tabs .= '<li id="' . $internal_tab->id . '_tab" data-target="' . esc_html(implode(",", $internal_tab->fields)) . '" class="nav-item nsc_bar_internal_tab">
-          <a data-includedids="' . esc_html(implode(",", $internal_tab->fields)) . '" id="' . $internal_tab->id . '_tab_link" class="nav-link ' . $active . '" aria-current="page">' . $internal_tab->name . '</a>
+        $tabs .= '<li id="' . $internal_tab->id . '_tab" data-includedids="' . esc_html(implode(",", $internal_tab->fields)) . '" class="nav-item nsc_bar_internal_tab">
+          <a data-includedids="' . esc_html(implode(",", $internal_tab->fields)) . '" href="#' . $internal_tab->id . '" id="' . $internal_tab->id . '_tab_link" class="nav-link ' . $active . '" aria-current="page">' . $internal_tab->name . '</a>
         </li>';
       }
       $tabs .= '</ul>';
@@ -74,7 +77,7 @@
         if ($newBannerEnabled === false && isset($field_configs->newBanner) && $field_configs->newBanner === true) {
           continue;
         }
-        ?>
+      ?>
         <?php
         $tabbedRow = "nsc_bar_non_tabbed_row";
         if (empty($objSettings->setting_page_fields->tabs[$active_tab_index]->internal_tabs) === false) {
@@ -83,7 +86,7 @@
           }
         }
         ?>
-        <tr id="tr_<?php echo esc_attr($field_configs->field_slug) ?>" class="<?php echo $tabbedRow; ?>">
+        <tr id="tr_<?php echo esc_attr($field_configs->field_slug) ?>" class="<?php echo $tabbedRow . " " . $dnone; ?>">
           <th scope="row">
             <?php echo esc_html($field_configs->name) ?>
           </th>

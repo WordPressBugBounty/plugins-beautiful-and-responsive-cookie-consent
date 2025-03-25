@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/nikelschubert/6.00EUR
 Tested up to: 6.7
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.5.6
+Stable tag: 4.6.0
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -15,6 +15,7 @@ A free and beautiful way to get a Cookie Banner without loading any external res
 = Key Features =
 
 - fully customizable texts, colors, fonts and position of the banner and buttons.
+- support WP Consent API and other consent APIs.
 - Google Tag Manager dataLayer pushes
 - choose between different compliance types: Just Inform, Opt-in, Opt-out, Differentiated. Cookies will not be stored by default. With differentiated you can define cookie groups, and for each group a user can give a consent.
 - show the Banner until user accepts all cookies.
@@ -116,6 +117,11 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.6.0 =
+- NEW: added support for [WP Consent API](https://wordpress.org/plugins/wp-consent-api/)
+- NEW: added support for [Pixel Manager for WooCommerce](https://wordpress.org/plugins/woocommerce-google-adwords-conversion-tracking-tag/) consent API
+- UI: Renamed Consent Mode Tab 
 
 = 4.5.6 =
 - FIX: International characters or now supported in link fields.

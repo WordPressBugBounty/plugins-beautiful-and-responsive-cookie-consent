@@ -3,7 +3,7 @@
 Plugin Name: Beautiful and responsive cookie consent
 Description: An easy way to get a beautiful GDPR Cookie Consent Banner. Customize it to match your compliance requirements and website layout. Highly customisable and responsive.
 Author: Beautiful Cookie Banner
-Version: 4.5.6
+Version: 4.6.0
 Author URI: https://beautiful-cookie-banner.com
 Text Domain: bar-cookie-consent
 License:     GPLv3
@@ -43,6 +43,7 @@ require dirname(__FILE__) . "/class/class-nsc_bar_admin_settings.php";
 require dirname(__FILE__) . "/class/class-nsc_bar_rest_api.php";
 require dirname(__FILE__) . "/class/class-nsc_bar_db_upgrader.php";
 require dirname(__FILE__) . "/class/class-nsc_bar_return_filter.php";
+require dirname(__FILE__) . "/class/class-nsc_bar_integrations.php";
 
 $nsc_bar_db_upgrader = new nsc_bar_db_upgrader;
 add_action('plugins_loaded', array($nsc_bar_db_upgrader, 'nsc_bar_do_update'));
@@ -102,3 +103,6 @@ function nsc_bar_do_frontend_actions()
     }
 }
 add_action("plugins_loaded", "nsc_bar_do_frontend_actions");
+
+$nscBarIntgerations = new nsc_bar_integrations();
+$nscBarIntgerations->add_filters();

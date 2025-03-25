@@ -651,11 +651,32 @@
         ]
       },
       {
-        "tabname": "Consent Mode",
-        "tab_description": "premium_addon_desc.html",
+        "tabname": "Consent APIs",
+        "tab_description": "premium_addon_desc_consent_apis.html",
         "tab_tipps": "",
         "tab_slug": "googleconsentmode",
         "internal_tabs": [
+          {
+            "id": "wpConsentApitab",
+            "name": "Wordpress Consent API",
+            "fields": [
+              "wpConsentApiStatistics",
+              "wpConsentApiStatisticsAnonymous",
+              "wpConsentApiMarketing",
+              "wpConsentApiFunctional",
+              "wpConsentApiPreferences"
+            ]
+          },
+          {
+            "id": "pixelManagerWooTab",
+            "name": "Pixel Manager for Woo",
+            "fields": [
+              "pixelManagerWooStatistics",
+              "pixelManagerWooMarketing",
+              "pixelManagerWooPreferences",
+              "pixelManagerWooNecessary"
+            ]
+          },
           {
             "id": "googleconsentmode",
             "name": "Google Consent Mode",
@@ -772,6 +793,141 @@
             "helpertext": "Clarity cookies (window.clarity('consent')) will be enabled, if the user opts in to one of the selected categories.",
             "name": "Microsoft Clarity allowed for",
             "disabled": true,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "wpConsentApiStatistics",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "Cookies or any other form of local storage that are used exclusively for statistical purposes (Analytics Cookies). More <a target='_blank' href='https://github.com/wordpress/wp-consent-level-api?tab=readme-ov-file'>info</a>",
+            "name": "Statistics",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "wpConsentApiStatisticsAnonymous",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "Cookies or any other form of local storage that are used exclusively for anonymous statistical purposes (Anonymous Analytics Cookies), that are placed on a first party domain, and that do not allow identification of particular individuals. More <a target='_blank' href='https://github.com/wordpress/wp-consent-level-api?tab=readme-ov-file'>info</a>",
+            "name": "Statistics Anonymous",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "wpConsentApiMarketing",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "Cookies or any other form of local storage required to create user profiles to send advertising or to track the user on a website or across websites for similar marketing purposes. More <a target='_blank' href='https://github.com/wordpress/wp-consent-level-api?tab=readme-ov-file'>info</a>",
+            "name": "Marketing",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "wpConsentApiFunctional",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "The cookie or any other form of local storage is used for the sole purpose of carrying out the transmission of a communication over an electronic communications network; OR The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user. If cookies are disabled, the requested functionality will not be available. This makes them essential functional cookies. More <a target='_blank' href='https://github.com/wordpress/wp-consent-level-api?tab=readme-ov-file'>info</a>",
+            "name": "Functional",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "wpConsentApiPreferences",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "Cookies or any other form of local storage that can not be seen as statistics, statistics-anonymous, marketing or functional, and where the technical storage or access is necessary for the legitimate purpose of storing preferences. More <a target='_blank' href='https://github.com/wordpress/wp-consent-level-api?tab=readme-ov-file'>info</a>",
+            "name": "Preferences",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "pixelManagerWooStatistics",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "For more infos see: <a target='_blank' href='https://sweetcode.com/docs/wpm/consent-management/api'>Pixel Manager for Woo</a>",
+            "name": "Statistics",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "pixelManagerWooMarketing",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "For more infos see: <a target='_blank' href='https://sweetcode.com/docs/wpm/consent-management/api'>Pixel Manager for Woo</a>",
+            "name": "Marketing",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "pixelManagerWooPreferences",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "For more infos see: <a target='_blank' href='https://sweetcode.com/docs/wpm/consent-management/api'>Pixel Manager for Woo</a>",
+            "name": "Preferences",
+            "disabled": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "pixelManagerWooNecessary",
+            "type": "multiselect",
+            "save_as": "array",
+            "required": false,
+            "selectable_values": [],
+            "glue": " or ",
+            "no_selection_text": "Never",
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "[]",
+            "helpertext": "For more infos see: <a target='_blank' href='https://sweetcode.com/docs/wpm/consent-management/api'>Pixel Manager for Woo</a>",
+            "name": "Necessary",
+            "disabled": false,
             "save_in_db": false
           }
         ]

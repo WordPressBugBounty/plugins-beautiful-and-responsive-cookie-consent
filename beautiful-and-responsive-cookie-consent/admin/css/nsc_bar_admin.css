@@ -36,6 +36,11 @@ body {
   border-left: 8px solid #ffa913;
 }
 
+.nsc_bar_notice_premium_addon_hint.green {
+  background: #fffefc;
+  border-left: 8px solid #39ab48;
+}
+
 .nsc_bar_notice_below_tabs {
   background: #fff;
   border-left-width: 4px;

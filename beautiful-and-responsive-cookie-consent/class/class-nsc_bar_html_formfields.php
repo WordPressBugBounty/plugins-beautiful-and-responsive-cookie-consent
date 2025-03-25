@@ -115,7 +115,7 @@ class nsc_bar_html_formfields
         $html = '
         <input type="hidden" data-glue="' . $this->field->glue . '" data-noselectiontext="' . $this->field->no_selection_text . '" id="' . $this->escFieldId . '" name="' . $this->escFieldName . '_hidden" value="' . esc_attr($this->convert_to_string($this->field->pre_selected_value)) . '"/>
         <div class="dropdown">
-        <div class="form-control dropdown-input w-100" id="multiSelectDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="form-control dropdown-input w-100" id="multiSelectDropdown-' . esc_attr($this->field->field_slug) . '" data-bs-toggle="dropdown" aria-expanded="false">
             <span id="' . $this->escFieldId . '_ms_selected_values" class="d-inline-block"></span>
         </div>
         <ul id="' . $this->escFieldId . '_ms_list" class="dropdown-menu w-100" aria-labelledby="multiSelectDropdown"></ul></div>'; // filled by JS
@@ -156,5 +156,4 @@ class nsc_bar_html_formfields
         $form_fields_addon = new nsc_bara_html_formfields_addon();
         return $form_fields_addon->nsc_bara_is_disabled($field);
     }
-
 }
