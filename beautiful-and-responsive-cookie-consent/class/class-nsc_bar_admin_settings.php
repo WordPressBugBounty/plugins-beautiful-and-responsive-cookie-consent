@@ -80,7 +80,11 @@ class nsc_bar_admin_settings
     $exposeJSConsentType = esc_js($this->plugin_configs->nsc_bar_get_option("type"));
     $validator = new nsc_bar_input_validation();
     $displayReview = $this->display_review();
-    $exposeJSCookieTypes = json_encode($validator->esc_array_for_js($this->plugin_configs->nsc_bar_get_option("cookietypes")), JSON_UNESCAPED_UNICODE);
+    $cookieTypesRaw = $this->plugin_configs->nsc_bar_get_option("cookietypes");
+    if (false === is_array($cookieTypesRaw)) {
+      $cookieTypesRaw = array();
+    }
+    $exposeJSCookieTypes = json_encode($validator->esc_array_for_js($cookieTypesRaw), JSON_UNESCAPED_UNICODE);
     $newBannerEnabled = $this->plugin_configs->nsc_bar_new_banner_enabled();
     $fallbackStateNewBanner = $this->getDefaultState();
     $premiumAddonInstalled = $this->plugin_configs->nsc_bar_isPremiumAddOnInstalled();

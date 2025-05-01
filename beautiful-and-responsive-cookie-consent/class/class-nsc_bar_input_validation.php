@@ -431,5 +431,4 @@ class nsc_bar_input_validation
             $string
         );
     }
-
 }
