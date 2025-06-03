@@ -23,6 +23,14 @@ body {
   border-left: 4px solid #dba617;
 }
 
+.nsc_bar_notice_error {
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-left-width: 4px;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+  border-left: 4px solid #ee2314;
+}
+
 .nsc_bar_notice_premium_addon_hint {
   background: #fefeff;
   border: 1px solid #c3c4c7;

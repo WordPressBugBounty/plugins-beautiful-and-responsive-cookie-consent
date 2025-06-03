@@ -94,11 +94,40 @@
             <fieldset>
               <?php echo $form_fields->nsc_bar_return_form_field($field_configs, $objSettings->plugin_prefix); ?>
               <?php
-              if (!empty($field_configs->custom_component)) {
-                $rest_url = get_rest_url();
-                $nonce = wp_create_nonce('wp_rest');
-                $string = str_replace("{{REST_URL_ENCODED}}", urlencode($rest_url), $field_configs->custom_component);
-                echo str_replace("{{WP_NONCE}}", $nonce, $string);
+              if (empty($field_configs->custom_component) === false && empty($field_configs->plugin_url) === true) {
+                // introduced in v3.8.4
+                echo '<div class="nsc_bar_notice_error py-4 px-3 mt-2">
+                       <p>All good - your current configuration is still working smoothly!
+                        However, to make any changes, you\'ll need to update to the latest version of the add-on.
+                        Unfortunately, older versions of the add-on aren\'t compatible with the newest version of the main plugin.</p>
+                    </div>';
+              }
+
+              if (empty($field_configs->custom_component) === false && empty($field_configs->plugin_url) === false) {
+                echo '
+                    <iframe width="100%"
+                      id="nsc_bar_cc_' . esc_attr($field_configs->field_slug) . '"
+                      src="' . $field_configs->custom_component . '">
+                    </iframe>
+                    <script>
+                      addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_cc_' . esc_attr($field_configs->field_slug) . '");});
+                      (function(){
+                          const iframe = document.getElementById("nsc_bar_cc_' . esc_attr($field_configs->field_slug) . '");
+                          iframe.addEventListener("load", ()=>{
+                              const config = {
+                                  source: "beautiful-cookie-banner",
+                                  pluginUrl: "' . esc_url($field_configs->plugin_url) . '",
+                                  mainPluginUrl: "' . esc_url(NSC_BAR_PLUGIN_URL) . '",
+                                  restURL:   "' . esc_url(get_rest_url()) . '",
+                                  nonce:     "' . esc_js(wp_create_nonce('wp_rest')) . '"
+                              };
+                              if(localStorage.getItem("nscDebugLog") === "true") {
+                                  console.log("iFrame loaded, sending config",config);
+                              }
+                              iframe.contentWindow.postMessage(config, window.location.origin);
+                          });
+                      })();
+                  </script>';
               }
               ?>
               <p class="description"><?php echo wp_kses($field_configs->helpertext, $allowed_html) ?></p>

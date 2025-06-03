@@ -33,7 +33,8 @@ $allowed_html = array(
 <div class="wrap">
 
     <script>
-        const nscBarConsentType = `<?php echo $exposeJSConsentType ?>`; const nscBarCookieTypes = <?php echo $exposeJSCookieTypes ?>
+        const nscBarConsentType = `<?php echo $exposeJSConsentType ?>`;
+        const nscBarCookieTypes = <?php echo $exposeJSCookieTypes ?>
     </script>
 
     <div id="nsc_bar_upper_area">
@@ -65,7 +66,7 @@ $allowed_html = array(
             }
 
             // here all tabs go with newBanner not set at all
-        
+
             $activeTab = "";
             if ($tab->active === true) {
                 $activeTab = 'nav-tab-active';
@@ -81,13 +82,33 @@ $allowed_html = array(
     }
 
     if (empty($_GET["tab"]) === false && $_GET["tab"] === "new_banner") {
-        $rest_url = urlencode(get_rest_url());
         $nonce = wp_create_nonce('wp_rest');
         echo wp_kses($objSettings->setting_page_fields->tabs[$active_tab_index]->tab_description, $allowed_html);
         if ($premiumAddonInstalled === false) {
             echo '<script>localStorage.setItem("nscBaraCookieBannerState",JSON.stringify(' . $fallbackStateNewBanner . '));</script>';
         }
-        echo '<script>addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_new_banner");}); </script><iframe width="100%" id="nsc_bar_new_banner" src="' . NSC_BAR_PLUGIN_URL . 'admin/new-banner/index.html?plugin_url_encoded=' . urlencode(NSC_BAR_PLUGIN_URL) . '&rest_url_encoded=' . $rest_url . '&wp_nonce=' . $nonce . '&cb=' . NSC_BAR_PLUGIN_VERSION . '"></iframe>';
+        echo '<script>addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_new_banner");}); 
+        </script><iframe width="100%"
+             id="nsc_bar_new_banner"
+             src="' . NSC_BAR_PLUGIN_URL . 'admin/new-banner/index.html?cb=' . NSC_BAR_PLUGIN_VERSION . '">
+        </iframe>
+        <script>
+            (function(){
+                const iframe = document.getElementById("nsc_bar_new_banner");
+                iframe.addEventListener("load", ()=>{
+                    const config = {
+                        source: "beautiful-cookie-banner",
+                        pluginUrl: "' . esc_url(NSC_BAR_PLUGIN_URL) . '",
+                        restURL:   "' . esc_url(get_rest_url()) . '",
+                        nonce:     "' . esc_js($nonce) . '"
+                    };
+                    if(localStorage.getItem("nscDebugLog") === "true") {
+                        console.log("iFrame loaded, sending config",config);
+                    }
+                    iframe.contentWindow.postMessage(config, window.location.origin);
+                });
+            })();
+        </script>';
     }
 
     ?>
