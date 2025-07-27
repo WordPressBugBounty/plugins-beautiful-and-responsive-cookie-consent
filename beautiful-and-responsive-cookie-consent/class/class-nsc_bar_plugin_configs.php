@@ -40,11 +40,11 @@ class nsc_bar_plugin_configs
         return $newBannerEnabled;
     }
 
-    public function nsc_bar_update_option($option_name, $option_value)
+    public function nsc_bar_update_option($option_name, $option_value, $autoLoad = true)
     {
         $settings_for_options = $this->nsc_bar_return_plugin_settings_without_db_settings();
         $option_name_with_prefix = $settings_for_options->plugin_prefix . $option_name;
-        return update_option($option_name_with_prefix, $option_value, true);
+        return update_option($option_name_with_prefix, $option_value, $autoLoad);
     }
 
     public function nsc_bar_delete_option($option_name)

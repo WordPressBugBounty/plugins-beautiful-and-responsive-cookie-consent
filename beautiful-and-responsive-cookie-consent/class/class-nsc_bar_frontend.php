@@ -91,7 +91,6 @@ class nsc_bar_frontend
             if ($cookieValue === "allow") {
                 $userSelects[] = str_replace($config_cookie_name . "_", "", $dlCookieName);
             }
-
         }
         return $userSelects;
     }
@@ -150,7 +149,6 @@ class nsc_bar_frontend
 
         $dataLayerValues = apply_filters('nsc_bar_filter_data_layer_values', $dataLayerValues);
         return $dataLayerValues;
-
     }
 
     private function escape_cookies($cookies)
@@ -194,7 +192,6 @@ class nsc_bar_frontend
 
         wp_add_inline_script("nsc_bar_nice-cookie-consent_js", $eventListener . ',' . $bannerInitScript . ');');
         wp_enqueue_script('nsc_bar_nice-cookie-consent_js');
-
     }
 
     public function nsc_bar_add_stylesheet_attributes($html, $handle)
@@ -235,7 +232,7 @@ class nsc_bar_frontend
     public function nsc_bar_shortcode_show_cookie_banner()
     {
         $linktext = $this->plugin_configs->nsc_bar_get_option("shortcode_link_show_banner_text");
-        return "<a id='nsc_bar_link_show_banner' class='nsc-bara-manage-cookie-settings' style='cursor: pointer;'>" . esc_html($linktext) . "</a>";
+        return "<a class='nsc-bara-manage-cookie-settings' style='cursor: pointer;'>" . esc_html($linktext) . "</a>";
     }
 
     public function nsc_bar_exclude_inline_scripts_from_caching($patterns)
@@ -292,7 +289,6 @@ class nsc_bar_frontend
         }
 
         return "deny";
-
     }
 
     private function get_create_custom_link($nsc_bar_banner_config, $targetBlank)
@@ -310,5 +306,4 @@ class nsc_bar_frontend
         }
         return $link_html;
     }
-
 }

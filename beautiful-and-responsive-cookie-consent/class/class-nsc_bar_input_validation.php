@@ -115,6 +115,9 @@ class nsc_bar_input_validation
             case "nsc_bar_text_only":
                 $return = $this->nsc_bar_text_only($return);
                 break;
+            case "nsc_bar_text_number_only":
+                $return = $this->nsc_bar_text_number_only($return);
+                break;
             case "customConsentButtons":
                 $return = $this->customConsentButtons($return);
                 break;
@@ -223,6 +226,19 @@ class nsc_bar_input_validation
             return null;
         }
         return $url;
+    }
+
+    public function nsc_bar_text_number_only($input)
+    {
+        $forbidden = "/[^\w\-\.\ 0-9]/";
+        $forbidden_chars = preg_match_all($forbidden, $input);
+
+        if (empty($forbidden_chars) === false) {
+            $this->admin_error_obj->nsc_bar_set_admin_error("Text could not be saved. Please provide only word and number characters in this field, space, - and . are allowed, too.");
+            return null;
+        }
+
+        return $input;
     }
 
     public function nsc_bar_text_only($input)

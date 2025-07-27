@@ -93,7 +93,8 @@ class nsc_bar_save_form_fields
                     $post_value = isset($_POST[$tabfield_slug]) ? $_POST[$tabfield_slug] : $_POST[$tabfield_slug . "_hidden"];
                     $new_value = $validate->nsc_bar_validate_field_custom_save($tabfield, $post_value);
                     if (!is_null($new_value)) {
-                        $this->plugin_configs->nsc_bar_update_option($tabfield->field_slug, $new_value);
+                        $autoLoad = isset($tabfield->auto_load) ? $tabfield->auto_load : true;
+                        $this->plugin_configs->nsc_bar_update_option($tabfield->field_slug, $new_value, $autoLoad);
                         $configs_updated = true;
                         $this->updated_fields[] = $tabfield_slug;
                     }
@@ -170,5 +171,4 @@ class nsc_bar_save_form_fields
         }
         return true;
     }
-
 }

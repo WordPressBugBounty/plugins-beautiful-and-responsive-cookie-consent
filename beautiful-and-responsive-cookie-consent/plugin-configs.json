@@ -1064,6 +1064,38 @@
         "tab_description": "tab_block_services_no_license.html",
         "tab_tipps": "",
         "tab_slug": "block_services",
+        "internal_tabs": [
+          {
+            "id": "blockingRulesTab",
+            "name": "Blocking Rules",
+            "fields": [
+              "activate_service_blocking",
+              "blocked_services",
+              "custom_services",
+              "enqueueBlockingScripts",
+              "blockedScriptsDynamicApiCall"
+            ]
+          },
+          {
+            "id": "placeholderConfigTab",
+            "name": "Placeholder Configuration",
+            "fields": [
+              "block-placeholder-primary-color",
+              "block-placeholder-background-color",
+              "block-placeholder-text-color",
+              "block-placeholder-button-text-color",
+              "block-placeholder-container-bg-color",
+              "block-placeholder-border-color",
+              "block-placeholder-font-family",
+              "block-placeholder-headline-text",
+              "block-placeholder-body-text",
+              "block-placeholder-button-text",
+              "block-placeholder-button-border-radius",
+              "block-placeholder-container-border-radius",
+              "customplaceholdertemplate"
+            ]
+          }
+        ],
         "active": false,
         "tabfields": [
           {
@@ -1097,6 +1129,173 @@
             "pre_selected_value": "{}",
             "helpertext": "",
             "name": "",
+            "save_in_db": true
+          },
+          {
+            "field_slug": "customplaceholdertemplate",
+            "type": "showtext",
+            "save_as": "display_only",
+            "required": false,
+            "extra_validation_name": false,
+            "pre_selected_value": "Need more customization options? You can create your own custom placeholder template. Find out how <a target='_blank' href='https://beautiful-cookie-banner.com/documentation-premium-add-on/block-placeholder-custom-template/'>here</a>.",
+            "helpertext": "",
+            "name": "All Settings",
+            "save_in_db": "skip"
+          },
+          {
+            "field_slug": "block-placeholder-headline-text",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "This Content is Blocked",
+            "helpertext": "",
+            "name": "Headline Text",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-body-text",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "Due to your current cookie choices, this content is being blocked. To view this content, please grant the necessary cookie consent.",
+            "helpertext": "",
+            "name": "Body Text",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-button-text",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_valid_json_string",
+            "pre_selected_value": "Adjust Consent Settings",
+            "helpertext": "",
+            "name": "Button Text",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-primary-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#676363",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Icon and Button Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-background-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#f9f9f9",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Background Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-text-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#333",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Text Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-button-text-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#ffffff",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Button Text Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-container-bg-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#ffffff",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Container Background Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-border-color",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#e0e0e0",
+            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "name": "Border Color",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-font-family",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_replace_doublequote_with_single",
+            "pre_selected_value": "system-ui, sans-serif;",
+            "helpertext": "Add you desired Fonts name here, e.g. 'Catamaran-Regular', sans-serif. Please be aware that these fonts should be loaded already. You can only use already existing fonts here. It won't install them.",
+            "name": "Font family",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-button-border-radius",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_text_number_only",
+            "pre_selected_value": "8px",
+            "helpertext": "Adjust the border radius of the CTA Button in the placeholder.",
+            "name": "Border Radius Button",
+            "disabled": true,
+            "auto_load": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "block-placeholder-container-border-radius",
+            "type": "longtext",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_text_number_only",
+            "pre_selected_value": "12px",
+            "helpertext": "Adjust the border radius of the container in the placeholder.",
+            "name": "Border Radius Container",
+            "disabled": true,
+            "auto_load": false,
             "save_in_db": true
           }
         ]

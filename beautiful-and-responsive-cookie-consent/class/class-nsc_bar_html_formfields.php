@@ -38,6 +38,8 @@ class nsc_bar_html_formfields
                 return $this->create_masked_field();
             case "multiselect":
                 return $this->create_multiselect();
+            case "showtext":
+                return $this->create_showtext();
             default:
                 return esc_attr($this->field->pre_selected_value);
         }
@@ -50,6 +52,11 @@ class nsc_bar_html_formfields
             return $form_fields_addon->nsc_bara_get_language_dropdown();
         }
         return '<select name="nsc_bar_language_selector" id="nsc_bar_countries_select"><option value="xx">Default</option></select>';
+    }
+
+    public function create_showtext()
+    {
+        return '<p>' . $this->field->pre_selected_value . '</p>';
     }
 
     private function create_checkbox()
@@ -83,7 +90,14 @@ class nsc_bar_html_formfields
             $maxLength = 5000;
             $size = 50;
         }
-        return '<label><input ' . $this->nsc_bar_is_disabled($this->field) . ' type="text"  id="' . $this->escFieldId . '" name="' . $this->escFieldName . '" size="' . $size . '" maxlength="' . $maxLength . '" value="' . esc_attr($this->field->pre_selected_value) . '"></label>';
+
+        $class = "";
+        if (isset($this->field->translatablev2) && $this->field->translatablev2 === true) {
+            $class = "translatable-v2";
+            $maxLength = 214748365;
+        }
+
+        return '<input class="' . $class . '" ' . $this->nsc_bar_is_disabled($this->field) . ' type="text"  id="' . $this->escFieldId . '" name="' . $this->escFieldName . '" size="' . $size . '" maxlength="' . $maxLength . '" value="' . esc_attr($this->field->pre_selected_value) . '">';
     }
 
     private function create_masked_field()

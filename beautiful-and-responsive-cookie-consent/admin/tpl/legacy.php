@@ -87,10 +87,14 @@
         }
         ?>
         <tr id="tr_<?php echo esc_attr($field_configs->field_slug) ?>" class="<?php echo $tabbedRow . " " . $dnone; ?>">
-          <th scope="row">
-            <?php echo esc_html($field_configs->name) ?>
-          </th>
-          <td>
+          <?php $xcolspan = ' colspan="2" class="nsc_bar_show_text"';
+          if ($field_configs->type !== "showtext") {
+            $xcolspan = "" ?>
+            <th scope="row">
+              <?php echo esc_html($field_configs->name) ?>
+            </th>
+          <?php } ?>
+          <td<?php echo $xcolspan ?>>
             <fieldset>
               <?php echo $form_fields->nsc_bar_return_form_field($field_configs, $objSettings->plugin_prefix); ?>
               <?php
@@ -132,7 +136,7 @@
               ?>
               <p class="description"><?php echo wp_kses($field_configs->helpertext, $allowed_html) ?></p>
             </fieldset>
-          </td>
+            </td>
         </tr>
       <?php } ?>
     </table>
