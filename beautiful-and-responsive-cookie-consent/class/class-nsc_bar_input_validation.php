@@ -230,7 +230,7 @@ class nsc_bar_input_validation
 
     public function nsc_bar_text_number_only($input)
     {
-        $forbidden = "/[^\w\-\.\ 0-9]/";
+        $forbidden = "/[^\w\-\.\ 0-9,%]/";
         $forbidden_chars = preg_match_all($forbidden, $input);
 
         if (empty($forbidden_chars) === false) {
@@ -243,7 +243,7 @@ class nsc_bar_input_validation
 
     public function nsc_bar_text_only($input)
     {
-        $forbidden = "/[^\w\-\.\ ]/";
+        $forbidden = "/[^\w\-\.\ ,]/";
         $forbidden_chars = preg_match_all($forbidden, $input);
 
         if (empty($forbidden_chars) === false) {

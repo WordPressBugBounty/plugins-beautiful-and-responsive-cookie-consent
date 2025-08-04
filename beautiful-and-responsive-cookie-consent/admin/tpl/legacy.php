@@ -43,6 +43,16 @@
 
   <?php echo "<div class='tab_description'>" . wp_kses($objSettings->setting_page_fields->tabs[$active_tab_index]->tab_description, $allowed_html) . "  </div>" ?>
 
+  <?php
+  if ($objSettings->setting_page_fields->tabs[$active_tab_index]->tab_slug === "revoke_settings_tab" && defined("NSC_BARA_PLUGIN_VERSION") && version_compare(NSC_BARA_PLUGIN_VERSION, "4.0.0", "<")) {
+    // introduced in v4.8.0
+    echo '<div class="nsc_bar_notice_error px-3 pt-3 mt-2">
+                       <p>To use this feature for Banner 2 please update to at least version 4.0.0 of the premium plugin.</p>
+                    </div>';
+  }
+
+  ?>
+
   <form action="" method="post">
     <?php wp_nonce_field("save_cookie_settings_" . $objSettings->plugin_slug . "--" . $objSettings->setting_page_fields->tabs[$active_tab_index]->tab_slug, 'nsc_bar_nonce'); ?>
     <input type="hidden" name="action" value="nsc_bar_cookie_settings_save" />

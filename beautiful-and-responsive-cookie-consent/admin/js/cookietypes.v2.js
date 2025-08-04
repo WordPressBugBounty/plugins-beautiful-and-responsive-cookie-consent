@@ -2,24 +2,34 @@ addCookieTableToPage('ff_nsc_bar_cookietypes', 'nsc_bar_cookietypes_table', true
 addCookieTableToPage('ff_nsc_bar_banner2categories', 'nsc_bar_banner2categories_table', false, 'Category');
 
 document.addEventListener('DOMContentLoaded', function (event) {
-  nsc_bar_setVisibility_after_checkbox("[name='nsc_bar_revokable']", ['tr_content_policy'], true);
+  nsc_bar_setVisibility_after_checkbox(
+    "[name='nsc_bar_revokeRemoveBackground']",
+    ['tr_revokeBackgroundColor', 'tr_revokeButtonBlur', 'tr_revokeBorderRadius'],
+    false
+  );
   nsc_bar_setVisibility_after_checkbox(
     "[id='ff_nsc_bar_showCloseX']",
     ['tr_content_close', 'tr_closeXClickStatus'],
     true
   );
   nsc_bar_setVisibility_compliance_drop_down();
-  nsc_bar_setVisibility_after_drop_down("[id='ff_nsc_bar_type']", ['tr_infoClickStatus'], ['info']);
-  nsc_bar_setVisibility_after_drop_down(
-    "[id='ff_nsc_bar_revokeBtnType']",
-    ['tr_revokeBtnIconDValue', 'tr_revokeBtnIconColor', 'tr_revokeBtnIconHeight'],
-    ['svgIcon']
-  );
-  nsc_bar_setVisibility_after_drop_down(
-    "[id='ff_nsc_bar_revokeButtonType']",
-    ['tr_revokeButtonDValue', 'tr_revokeButtonColor', 'tr_revokeButtonSize'],
-    ['svgIcon']
-  );
+  nsc_bar_setVisibility_after_drop_down("[id='ff_nsc_bar_type']", ['tr_infoClickStatus'], ['info'], {
+    valuesToShow: ['info'],
+    hide: [],
+    show: ['tr_infoClickStatus'],
+  });
+
+  nsc_bar_setVisibility_after_drop_down("[id='ff_nsc_bar_revokeBtnType']", {
+    valuesToShow: ['svgIcon'],
+    hide: ['tr_revokeTextColor'],
+    show: ['tr_revokeBtnIconDValue', 'tr_revokeBtnIconColor', 'tr_revokeBtnIconHeight'],
+  });
+
+  nsc_bar_setVisibility_after_drop_down("[id='ff_nsc_bar_revokeButtonType']", {
+    valuesToShow: ['svgIcon'],
+    hide: ['tr_revokeTextColor'],
+    show: ['tr_revokeBtnIconDValue', 'tr_revokeBtnIconColor', 'tr_revokeBtnIconHeight'],
+  });
 });
 
 function nsc_bar_setVisibility_after_checkbox(selector, idsToSetVisibility, visibileIfChecked) {
@@ -55,7 +65,7 @@ function nsc_bar_setVisibility_after_checkbox(selector, idsToSetVisibility, visi
   checkbox.dataset.clickListener = true;
 }
 
-function nsc_bar_setVisibility_after_drop_down(selector, idsToSetVisibility, valuesToMakeVisible) {
+function nsc_bar_setVisibility_after_drop_down(selector, config) {
   if (!document.querySelector(selector)) {
     return;
   }
@@ -63,15 +73,29 @@ function nsc_bar_setVisibility_after_drop_down(selector, idsToSetVisibility, val
   var dropdown = document.querySelector(selector);
   var selector_value = dropdown.value;
 
-  for (var i = 0, len = idsToSetVisibility.length; i < len; i += 1) {
-    var elementToSetVisibility = document.getElementById(idsToSetVisibility[i]);
+  for (var i = 0, len = config.show.length; i < len; i += 1) {
+    var elementToSetVisibility = document.getElementById(config.show[i]);
     if (!elementToSetVisibility) {
       continue;
     }
-    if (selector_value && valuesToMakeVisible.includes(selector_value)) {
+
+    if (selector_value && config.valuesToShow.includes(selector_value)) {
       elementToSetVisibility.hidden = false;
     } else {
       elementToSetVisibility.hidden = true;
+    }
+  }
+
+  for (var i = 0, len = config.hide.length; i < len; i += 1) {
+    var elementToSetVisibility = document.getElementById(config.hide[i]);
+    if (!elementToSetVisibility) {
+      continue;
+    }
+
+    if (selector_value && config.valuesToShow.includes(selector_value)) {
+      elementToSetVisibility.hidden = true;
+    } else {
+      elementToSetVisibility.hidden = false;
     }
   }
 
@@ -80,7 +104,7 @@ function nsc_bar_setVisibility_after_drop_down(selector, idsToSetVisibility, val
   }
 
   dropdown.addEventListener('change', function () {
-    nsc_bar_setVisibility_after_drop_down(selector, idsToSetVisibility, valuesToMakeVisible);
+    nsc_bar_setVisibility_after_drop_down(selector, config);
   });
 
   dropdown.dataset.clickListenerX = true;

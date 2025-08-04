@@ -87,6 +87,7 @@ $allowed_html = array(
         if ($premiumAddonInstalled === false) {
             echo '<script>localStorage.setItem("nscBaraCookieBannerState",JSON.stringify(' . $fallbackStateNewBanner . '));</script>';
         }
+        $loadCustomBuildCss = 0;
         echo '<script>addEventListener("load", (event) => {iFrameResize({ log: false, minHeight: 500 }, "#nsc_bar_new_banner");}); 
         </script><iframe width="100%"
              id="nsc_bar_new_banner"
@@ -100,7 +101,9 @@ $allowed_html = array(
                         source: "beautiful-cookie-banner",
                         pluginUrl: "' . esc_url(NSC_BAR_PLUGIN_URL) . '",
                         restURL:   "' . esc_url(get_rest_url()) . '",
-                        nonce:     "' . esc_js($nonce) . '"
+                        nonce:     "' . esc_js($nonce) . '",
+                        content_url: "' . esc_url(content_url()) . '",
+                        customBuildCss: ' . $loadCustomBuildCss . ',
                     };
                     if(localStorage.getItem("nscDebugLog") === "true") {
                         console.log("iFrame loaded, sending config",config);

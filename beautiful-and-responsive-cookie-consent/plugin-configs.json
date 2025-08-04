@@ -244,8 +244,19 @@
             "required": false,
             "extra_validation_name": "nsc_bar_check_input_color_code",
             "pre_selected_value": "#237afc",
-            "helpertext": "You can add hex #fff or rgba rgba(100,100,100,0.9) colors here.",
+            "helpertext": "You can add hex #fff or rgba(100,100,100,0.9) colors here. If you want to blur the background, you need to add enough transparency to the background, e.g. rgba(100,100,100,0.5).",
             "name": "Banner Background Color",
+            "save_in_db": false
+          },
+          {
+            "field_slug": "palette_popup_backgroundBlurEffect",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": "nsc_bar_text_number_only",
+            "pre_selected_value": "0px",
+            "helpertext": "To blur the background of the banner, please add here the blur in px. Uses backdrop-filter. Make sure, that `Banner Background Color` has enough transparency, e.g. rgba(100,100,100,0.5), otherwise it won't work. To remove the blur set it to 0px.",
+            "name": "Blurring Banner Background",
             "save_in_db": false
           },
           {
@@ -938,7 +949,6 @@
         "tab_tipps": "tab_revoke_description.html",
         "tab_slug": "revoke_settings_tab",
         "active": false,
-        "newBanner": false,
         "tabfields": [
           {
             "field_slug": "revokable",
@@ -961,6 +971,24 @@
             "pre_selected_value": true,
             "helpertext": "Always show the `Cookie Settings Tab`, if unchecked it won't fade away. To enable this feature get the premium add-on from <a target='_blank' href='https://beautiful-cookie-banner.com/'>beautiful-cookie-banner.com</a> and support the development of this plugin.",
             "name": "Cookie Settings fade in",
+            "newBanner": false,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "positionRevokeButton",
+            "type": "select",
+            "save_as": "string",
+            "required": false,
+            "selectable_values": [
+              { "value": "bottom-left", "name": "Float bottom left" },
+              { "value": "bottom-right", "name": "Float bottom right" },
+              { "value": "top-left", "name": "Float top left" },
+              { "value": "top-right", "name": "Float top  right" }
+            ],
+            "extra_validation_name": false,
+            "pre_selected_value": "bottom-right",
+            "helpertext": "",
+            "name": "Position 'Cookie Settings' tab",
             "save_in_db": false
           },
           {
@@ -982,23 +1010,7 @@
             "name": "'Cookie Settings' tab style",
             "save_in_db": false
           },
-          {
-            "field_slug": "positionRevokeButton",
-            "type": "select",
-            "save_as": "string",
-            "required": false,
-            "selectable_values": [
-              { "value": "bottom-left", "name": "Float bottom left" },
-              { "value": "bottom-right", "name": "Float bottom right" },
-              { "value": "top-left", "name": "Float top left" },
-              { "value": "top-right", "name": "Float top  right" }
-            ],
-            "extra_validation_name": false,
-            "pre_selected_value": "bottom-right",
-            "helpertext": "",
-            "name": "Position 'Cookie Settings' tab",
-            "save_in_db": false
-          },
+
           {
             "field_slug": "revokeButtonDValue",
             "type": "extralongtext",
@@ -1012,6 +1024,19 @@
             "save_in_db": false
           },
           {
+            "field_slug": "revokeTextColor",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "disabled": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#000000",
+            "newBanner": true,
+            "helpertext": "You can add hex #fff or rgba(100,100,100,0.9) colors here. Default: #000000",
+            "name": "Text Color",
+            "save_in_db": false
+          },
+          {
             "field_slug": "revokeButtonColor",
             "type": "text",
             "save_as": "string",
@@ -1019,7 +1044,7 @@
             "disabled": true,
             "extra_validation_name": "nsc_bar_check_input_color_code",
             "pre_selected_value": "#009868",
-            "helpertext": "Add here the color code for the SVG, e.g. #009868.",
+            "helpertext": "You can add hex #fff or rgba(100,100,100,0.9) colors here. Default: #009868",
             "name": "Color of SVG icon",
             "save_in_db": false
           },
@@ -1033,6 +1058,59 @@
             "pre_selected_value": "2em",
             "helpertext": "Adjust the size of the SVG Icon, example value: 2em",
             "name": "Height of SVG icon",
+            "save_in_db": false
+          },
+          {
+            "field_slug": "revokeRemoveBackground",
+            "type": "checkbox",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": false,
+            "pre_selected_value": false,
+            "helpertext": "Remove the background of the button. Can be nice with SVG icons.",
+            "name": "Remove Background of Button",
+            "translatable": false,
+            "disabled": false,
+            "newBanner": true,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "revokeBackgroundColor",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "disabled": false,
+            "extra_validation_name": "nsc_bar_check_input_color_code",
+            "pre_selected_value": "#ffffff",
+            "newBanner": true,
+            "helpertext": "You can add hex #fff or rgba(100,100,100,0.9) colors here. Default: #ffffff.",
+            "name": "Background Color",
+            "save_in_db": false
+          },
+          {
+            "field_slug": "revokeButtonBlur",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "disabled": false,
+            "extra_validation_name": "nsc_bar_text_number_only",
+            "pre_selected_value": "15px",
+            "helpertext": "To blur the background of the button, please add here the blur in px. Uses backdrop-filter. Make sure, that `Background Color` has enough transparency, e.g. rgba(100,100,100,0.5), otherwise it won't work. To remove the blur set it to 0px.",
+            "name": "Background Blur Effect",
+            "newBanner": true,
+            "save_in_db": false
+          },
+          {
+            "field_slug": "revokeBorderRadius",
+            "type": "text",
+            "save_as": "string",
+            "required": false,
+            "disabled": false,
+            "extra_validation_name": "nsc_bar_text_number_only",
+            "pre_selected_value": "4px",
+            "helpertext": "Add here the border radius for the floating button, e.g. 4px",
+            "name": "Border Radius of Button",
+            "newBanner": true,
             "save_in_db": false
           },
           {
@@ -1055,7 +1133,8 @@
             "pre_selected_value": "Manage cookie settings",
             "helpertext": "Text for link for showing the banner again. Nice to give user ability to manage their settings without displaying the 'Cookie Settings' tab. To display the link use this shortcode: [cc_show_cookie_banner_nsc_bar]",
             "name": "Shortcode: Link text 'show banner'",
-            "save_in_db": true
+            "save_in_db": true,
+            "newBanner": false
           }
         ]
       },
