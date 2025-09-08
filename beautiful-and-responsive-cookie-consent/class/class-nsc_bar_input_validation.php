@@ -437,6 +437,55 @@ class nsc_bar_input_validation
         return $this->admin_error_obj;
     }
 
+    public function nsc_bar_validate_addon()
+    {
+        if (defined('NSC_BARA_UPDATE_TRANSIENT_NAME') === false) {
+            return;
+        }
+
+        if (defined('NSC_BARA_PLUGIN_VERSION') === false) {
+            return;
+        }
+
+
+        $updateInfos = "";
+        if (stripos(NSC_BARA_UPDATE_TRANSIENT_NAME, NSC_BARA_PLUGIN_VERSION) !== false) {
+            $updateInfos = get_transient(NSC_BARA_UPDATE_TRANSIENT_NAME);
+        }
+
+        if (!empty($updateInfos) && is_object($updateInfos) && empty($updateInfos->new_version) === false && version_compare(NSC_BARA_PLUGIN_VERSION, "3.8.0", '<=')) {
+            $slug = "nsc_bar_version_too_outdated_warning_dismiss";
+            $version = 1;
+            $message = "The Beautiful Cookie Banner Addon is activated but your version " . esc_html(NSC_BARA_PLUGIN_VERSION) . " is very much outdated. Please update to the latest version " . esc_html($updateInfos->new_version) . ". Without updates, your WordPress site may become vulnerable to security risks and the banner might stop working.";
+        }
+
+        if (!empty($updateInfos) && is_object($updateInfos) && empty($updateInfos->update_message) === false) {
+            $slug = "nsc_bar_no_valid_license_key_warning_dismiss";
+            $version = 1;
+            $message = "The Beautiful Cookie Banner Addon is activated but there seems to be a problem with your license key. Please double check your <a href=\"/wp-admin/options-general.php?page=nsc_bar-cookie-consent&tab=license&nsc_bara_language_selector=xx\">license key</a> or remove the addon. Without updates, your WordPress site may become vulnerable to security risks and the banner might stop working in the future.";
+        }
+
+        if (empty(get_option("nsc_bar_license_key", "")) === true) {
+            $slug = "nsc_bar_no_license_key_warning_dismiss";
+            $version = 1;
+            $message = "The Beautiful Cookie Banner Addon is activated but the license key is missing. Please enter a valid <a href=\"/wp-admin/options-general.php?page=nsc_bar-cookie-consent&tab=license&nsc_bara_language_selector=xx\">license key</a> to receive updates or remove the addon. Without updates, your WordPress site may become vulnerable to security risks and the banner might stop working in the future.";
+        }
+
+        if (!empty($updateInfos) && is_object($updateInfos) && empty($updateInfos->global_wp_message) === false) {
+            $slug = "nsc_bar_global_remote_warning_dismiss";
+            $version = md5($updateInfos->global_wp_message);
+            $message = $updateInfos->global_wp_message;
+        }
+
+
+
+        $admin_error = new nsc_bar_admin_error;
+        $admin_error->nsc_bar_set_global_warning_message($message, $slug, $version);
+        add_action('admin_notices', array($admin_error, 'nsc_bar_global_admin_warning'));
+        add_action('network_admin_notices', array($admin_error, 'nsc_bar_global_admin_warning'));
+        add_action('admin_post_' . $slug, array($admin_error, 'nsc_bar_handle_dismiss'));
+    }
+
     private function encode_non_ascii($string)
     {
         return preg_replace_callback(

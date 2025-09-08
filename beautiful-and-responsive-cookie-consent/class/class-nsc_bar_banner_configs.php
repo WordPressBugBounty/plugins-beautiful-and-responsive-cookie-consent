@@ -96,6 +96,9 @@ class nsc_bar_banner_configs
         }
 
         $settings_value = apply_filters('nsc_bar_filter_get_cookie_setting', $settings_value, $field_slug);
+        if ($field_slug === "cookie_domain" && is_string($settings_value)) {
+            $settings_value = ltrim($settings_value, ".");
+        }
         return $settings_value;
     }
 

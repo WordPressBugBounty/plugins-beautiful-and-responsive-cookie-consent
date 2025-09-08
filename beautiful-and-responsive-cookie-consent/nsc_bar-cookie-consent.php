@@ -3,7 +3,7 @@
 Plugin Name: Beautiful and responsive cookie consent
 Description: An easy way to get a beautiful GDPR Cookie Consent Banner. Customize it to match your compliance requirements and website layout. Highly customisable and responsive.
 Author: Beautiful Cookie Banner
-Version: 4.8.0
+Version: 4.9.0
 Author URI: https://beautiful-cookie-banner.com
 Plugin URI: https://beautiful-cookie-banner.com
 Text Domain: bar-cookie-consent
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define("NSC_BAR_PLUGIN_DIR", dirname(__FILE__));
 define("NSC_BAR_PLUGIN_URL", plugin_dir_url(__FILE__));
-define("NSC_BAR_PLUGIN_VERSION", "4.8.0");
+define("NSC_BAR_PLUGIN_VERSION", "4.9.0");
 define("NSC_BAR_SLUG_DBVERSION", "nsc_bar_db_version");
 
 require dirname(__FILE__) . "/class/class-nsc_bar_admin_error.php";
@@ -62,6 +62,8 @@ $nsc_bar_cookie_handler = new nsc_bar_cookie_handler;
 if (is_admin()) {
     $nsc_bar_save_formfields = new nsc_bar_save_form_fields();
     add_action('plugins_loaded', array($nsc_bar_save_formfields, 'nsc_bar_save_submitted_form_fields'), 50);
+    $nsc_bar_input_validation = new nsc_bar_input_validation;
+    add_action('plugins_loaded', array($nsc_bar_input_validation, 'nsc_bar_validate_addon'));
 
     $nsc_bar_admin_settings = new nsc_bar_admin_settings;
     $nsc_bar_admin_settings->nsc_bar_execute_backend_wp_actions();

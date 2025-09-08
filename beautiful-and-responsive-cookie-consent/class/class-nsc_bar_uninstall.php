@@ -25,6 +25,14 @@ class nsc_bar_uninstaller
                 delete_option($name);
             }
         }
+
+        global $wpdb;
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE %s",
+                $wpdb->esc_like('nsc_bar') . '%'
+            )
+        );
     }
 
     private function nsc_bar_get_all_nsc_bar_settings()

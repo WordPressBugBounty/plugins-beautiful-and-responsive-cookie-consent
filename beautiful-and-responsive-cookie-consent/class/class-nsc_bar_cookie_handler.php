@@ -8,6 +8,7 @@ class nsc_bar_cookie_handler
     private $banner_configs_object;
     private $cookie_configs;
     private $plugin_configs;
+    private $newBannerEnabled;
 
     public function __construct()
     {
@@ -22,7 +23,6 @@ class nsc_bar_cookie_handler
             $this->plugin_configs->nsc_bar_get_option('activate_banner') == true &&
             $this->plugin_configs->nsc_bar_get_option('backend_cookie_conversion') == true
         ) {
-
             $expiryDate = $this->get_expiry_date($this->cookie_configs['name'], $this->cookie_configs['expirydays']);
 
             if (isset($_COOKIE[$this->cookie_configs['name']])) {
@@ -95,11 +95,60 @@ class nsc_bar_cookie_handler
         }
     }
 
+    public function clean_up_old_itpsave_cookie_banner_2()
+    {
+        if (!isset($_COOKIE["nsc_bar_cs_done"])) {
+            return;
+        }
+
+        if (version_compare(phpversion(), '7.3', '<')) {
+            setcookie("nsc_bar_cs_done", "del", time() - 3600, '/; samesite=lax', "", false, false);
+        } else {
+            /**
+             * @disregard P1006
+             */
+            setcookie("nsc_bar_cs_done", "del", [
+                'expires' => time() - 3600,
+                'path' => "/",
+                'domain' => "",
+                'samesite' => 'lax',
+                'secure' => false,
+                'httponly' => false,
+            ]);
+        }
+
+        if (!isset($_COOKIE[$this->cookie_configs['name']])) {
+            return;
+        }
+
+        if ($this->newBannerEnabled === false) {
+            return;
+        }
+
+        if (version_compare(phpversion(), '7.3', '<')) {
+            setcookie($this->cookie_configs['name'], "del", time() - 3600, '/; samesite=lax', "", false, false);
+        } else {
+            /**
+             * @disregard P1006
+             */
+            setcookie($this->cookie_configs['name'], "del", [
+                'expires' => time() - 3600,
+                'path' => "/",
+                'domain' => "",
+                'samesite' => 'lax',
+                'secure' => false,
+                'httponly' => false,
+            ]);
+        }
+    }
+
     public function nsc_bar_cookie_cleanup()
     {
         if (!isset($_COOKIE[$this->cookie_configs['name']])) {
             return;
         }
+
+        $this->clean_up_old_itpsave_cookie_banner_2();
 
         $input_validation = new nsc_bar_input_validation();
         $current_cookie_value = $input_validation->nsc_bar_sanitize_input($_COOKIE[$this->cookie_configs['name']]);
@@ -148,7 +197,6 @@ class nsc_bar_cookie_handler
                 }
             }
         }
-
     }
 
     public function nsc_bar_delete_cookie($delete_detailed = true)
@@ -162,7 +210,6 @@ class nsc_bar_cookie_handler
                 unset($_COOKIE["nsc_bar_cs_done"]);
                 $this->set_cookie("nsc_bar_cs_done", "emptyvalue", time() - 3600, $this->cookie_configs['path'], $this->cookie_configs['domain']);
             }
-
         }
 
         if ($delete_detailed === false) {
@@ -223,6 +270,7 @@ class nsc_bar_cookie_handler
         if (empty($this->plugin_configs)) {
             $this->plugin_configs = new nsc_bar_plugin_configs;
         }
+        $this->newBannerEnabled = $this->plugin_configs->nsc_bar_new_banner_enabled();
         return $this->plugin_configs;
     }
 
@@ -247,15 +295,23 @@ class nsc_bar_cookie_handler
     private function set_cookie($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false)
     {
 
+        $cleanDomain = empty($domain) ? "." . parse_url(home_url(), PHP_URL_HOST) : "." . ltrim($domain, ".");
+        if ($cleanDomain === ".") {
+            $cleanDomain = "";
+        }
+
         if (version_compare(phpversion(), '7.3', '<')) {
-            setcookie($name, $value, $expire, $path . '; samesite=lax', $domain, $secure, $httpOnly);
+            setcookie($name, $value, $expire, $path . '; samesite=lax', $cleanDomain, $secure, $httpOnly);
             return;
         }
 
+        /**
+         * @disregard P1006
+         */
         setcookie($name, $value, [
             'expires' => $expire,
             'path' => $path,
-            'domain' => $domain,
+            'domain' => $cleanDomain,
             'samesite' => 'lax',
             'secure' => $secure,
             'httponly' => $httpOnly,

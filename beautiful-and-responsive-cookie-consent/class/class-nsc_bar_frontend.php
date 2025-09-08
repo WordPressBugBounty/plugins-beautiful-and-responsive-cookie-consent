@@ -232,7 +232,7 @@ class nsc_bar_frontend
     public function nsc_bar_shortcode_show_cookie_banner()
     {
         $linktext = $this->plugin_configs->nsc_bar_get_option("shortcode_link_show_banner_text");
-        return "<a class='nsc-bara-manage-cookie-settings' style='cursor: pointer;'>" . esc_html($linktext) . "</a>";
+        return '<a class="nsc-bara-manage-cookie-settings" style="cursor: pointer;">' . esc_html($linktext) . '</a>';
     }
 
     public function nsc_bar_exclude_inline_scripts_from_caching($patterns)

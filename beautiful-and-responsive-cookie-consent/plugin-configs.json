@@ -696,13 +696,14 @@
               "consentModeConfig",
               "coMoAdsDataRedaction",
               "coMoUrlPassThrough",
-              "consentModeWaitForUpdate"
+              "consentModeWaitForUpdate",
+              "microsoftUETconsentMode"
             ]
           },
           {
             "id": "msconsentmode",
             "name": "Microsoft Consent Mode",
-            "fields": ["microsoftUETconsentMode", "microsoftClarityEnabled", "microsoftClarityAllowedCats"]
+            "fields": ["microsoftClarityEnabled", "microsoftClarityAllowedCats"]
           }
         ],
         "active": false,
@@ -730,6 +731,18 @@
             "name": "Consent Mode",
             "disabled": true,
             "save_in_db": false
+          },
+          {
+            "field_slug": "microsoftUETconsentMode",
+            "type": "checkbox",
+            "save_as": "boolean",
+            "required": false,
+            "extra_validation_name": false,
+            "pre_selected_value": false,
+            "helpertext": "Google Consent Mode has to be enabled for MS UET. When checked, it will additionally set ad_storage for Microsoft UET consent mode to 'granted' for all cases where Google Consent Mode ad_storage is granted, too. In future releases this will be decoupled from Google Consent Mode.",
+            "name": "Use ad_storage for Microsoft UET consent mode, too",
+            "disabled": true,
+            "save_in_db": true
           },
           {
             "field_slug": "coMoAdsDataRedaction",
@@ -766,18 +779,6 @@
             "name": "wait_for_update in ms",
             "disabled": true,
             "save_in_db": false
-          },
-          {
-            "field_slug": "microsoftUETconsentMode",
-            "type": "checkbox",
-            "save_as": "boolean",
-            "required": false,
-            "extra_validation_name": false,
-            "pre_selected_value": false,
-            "helpertext": "When checked, it will additionally set ad_storage for Microsoft UET consent mode to 'granted' for all cases where Google Consent Mode ad_storage is granted, too.",
-            "name": "Use ad_storage for Microsoft UET consent mode, too",
-            "disabled": true,
-            "save_in_db": true
           },
           {
             "field_slug": "microsoftClarityEnabled",
@@ -1451,6 +1452,18 @@
             "helpertext": "For more a detailed documentation how to strutcture the json please visit: https://cookieconsent.osano.com/download/",
             "name": "JSON Config",
             "newBanner": false,
+            "save_in_db": true
+          },
+          {
+            "field_slug": "enable_public_api",
+            "type": "checkbox",
+            "save_as": "string",
+            "required": false,
+            "extra_validation_name": false,
+            "pre_selected_value": false,
+            "helpertext": "If you want to use the API for updating your banner settings. Learn more about the <a target='_blank' href='https://beautiful-cookie-banner.com/documentation-premium-add-on/api-documentation/settings-api/'>setting API</a>",
+            "name": "Enable Settings API",
+            "disabled": true,
             "save_in_db": true
           },
           {

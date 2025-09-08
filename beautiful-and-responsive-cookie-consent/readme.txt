@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/nikelschubert/6.00EUR
 Tested up to: 6.8
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.8.0
+Stable tag: 4.9.0
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -117,6 +117,14 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.9.0 =
+- SECURITY FIX: Fixed potential stored Cross-Site Scripting vulnerability.
+- NEW: Banner 1 - Cookie domain has now the same logic as Banner 2. Domain is set to ".example.com" and not "example.com" anymore.
+- NEW: Added a global admin warning for site administrators when the premium add-on is missing critical updates. We do not like global notices, but in this case we think they are justified to highlight potential security risks from outdated versions.
+- REFACTOR (Premium): MS UET consent mode, now back in Google Consent mode tab, to make clear, that they are coupled. A decoupling will happen in future releases.
+- NEW (Premium): Setting for disabling the public API.
+- FIX (Premium): Sometimes backend cookie conversion lead to problems updating the consent storage cookie.
 
 = 4.8.0 =
 - NEW: Blur the Background of Banner 1.
