@@ -477,6 +477,17 @@ class nsc_bar_input_validation
             $message = $updateInfos->global_wp_message;
         }
 
+        if (empty($message)) {
+            return;
+        }
+
+        if (empty($slug)) {
+            return;
+        }
+
+        if (empty($version)) {
+            return;
+        }
 
 
         $admin_error = new nsc_bar_admin_error;

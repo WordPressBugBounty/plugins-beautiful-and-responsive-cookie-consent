@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/nikelschubert/6.00EUR
 Tested up to: 6.8
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.9.0
+Stable tag: 4.9.1
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -117,6 +117,10 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.9.1 =
+
+- FIX: Resolved PHP warnings that appeared in the admin area for certain installations.
 
 = 4.9.0 =
 - SECURITY FIX: Fixed potential stored Cross-Site Scripting vulnerability.
