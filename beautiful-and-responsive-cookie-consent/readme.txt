@@ -2,10 +2,10 @@
 Tags: cookie consent, cookie banner, cookie consent banner, gdpr, google consent mode v2
 Requires at least: 4.0
 Donate link: https://www.paypal.me/nikelschubert/6.00EUR
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.9.1
+Stable tag: 4.9.2
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
@@ -117,6 +117,10 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.9.2 =
+
+- FIX: Banner 1 - Resolved an accessibility issue where the Cookie Settings tab could not be accessed using keyboard navigation only.
 
 = 4.9.1 =
 

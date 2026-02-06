@@ -73,6 +73,9 @@ function nsc_bar_setVisibility_after_drop_down(selector, config) {
   var dropdown = document.querySelector(selector);
   var selector_value = dropdown.value;
 
+  config.show = config.show || [];
+  config.hide = config.hide || [];
+
   for (var i = 0, len = config.show.length; i < len; i += 1) {
     var elementToSetVisibility = document.getElementById(config.show[i]);
     if (!elementToSetVisibility) {
