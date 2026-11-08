@@ -42,7 +42,7 @@ class nsc_bar_save_form_fields
         }
 
         $validate = new nsc_bar_input_validation;
-        $updated = $this->save_settings(null, $validate);
+        $updated = $this->save_settings(null, $validate, true);
         $saved_language_configs = $this->banner_configs_obj->nsc_bar_get_banner_config_array();
         $this->override_other_addon_configs($updated, $saved_language_configs, $validate);
         //needed for testing
@@ -63,7 +63,7 @@ class nsc_bar_save_form_fields
         return $this->updated_fields;
     }
 
-    private function save_settings($addon_settings, $validate)
+    private function save_settings($addon_settings, $validate, $form_request = false)
     {
         // just to make sure.
         if (current_user_can(esc_attr($this->plugin_settings->settings_page_configs->capability)) === false) {
@@ -81,6 +81,9 @@ class nsc_bar_save_form_fields
                 $manager_string = $this->value_save_manager($tabfield, $tabfield_slug, $addon_settings);
                 if ($manager_string === "update_banner") {
                     $post_value = isset($_POST[$tabfield_slug]) ? $_POST[$tabfield_slug] : $_POST[$tabfield_slug . "_hidden"];
+                    if ($form_request && $tabfield->extra_validation_name === 'nsc_bar_font_family' && is_string($post_value)) {
+                        $post_value = wp_unslash($post_value);
+                    }
                     $new_value = $validate->nsc_bar_validate_field_custom_save($tabfield, $post_value);
                     if (!is_null($new_value)) {
                         $this->banner_configs_obj->nsc_bar_update_banner_setting($tabfield->field_slug, $new_value, $tabfield->save_as);
@@ -91,6 +94,11 @@ class nsc_bar_save_form_fields
 
                 if ($manager_string === "update_wp_option") {
                     $post_value = isset($_POST[$tabfield_slug]) ? $_POST[$tabfield_slug] : $_POST[$tabfield_slug . "_hidden"];
+                    // The import validator consumes raw JSON. Only browser form
+                    // requests have WordPress-added slashes; API JSON does not.
+                    if ($form_request && $tabfield->extra_validation_name === 'nsc_bar_check_input_export_json_string' && is_string($post_value)) {
+                        $post_value = wp_unslash($post_value);
+                    }
                     $new_value = $validate->nsc_bar_validate_field_custom_save($tabfield, $post_value);
                     if (!is_null($new_value)) {
                         $autoLoad = isset($tabfield->auto_load) ? $tabfield->auto_load : true;
@@ -133,7 +141,7 @@ class nsc_bar_save_form_fields
             $this->banner_configs_obj->nsc_bar_set_banner_config_array($language_config);
             // to know where to save
             $this->banner_configs_obj->nsc_bar_set_banner_configs_slug($bara_banner_configs->nsc_bara_get_banner_settings_slug($addon_settings));
-            $this->save_settings($addon_settings, $validate);
+            $this->save_settings($addon_settings, $validate, true);
         }
     }
 

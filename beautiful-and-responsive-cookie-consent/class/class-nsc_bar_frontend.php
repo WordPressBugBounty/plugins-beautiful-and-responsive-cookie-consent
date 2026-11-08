@@ -19,6 +19,9 @@ class nsc_bar_frontend
     private $dataLayerName;
     private $container;
 
+    // The keys in the dataLayer never depend on the configured cookie name: "cookieconsent_status" and "cookieconsent_status_<suffix>".
+    const DATALAYER_STATUS_KEY = "cookieconsent_status";
+
     public function __construct()
     {
         $this->plugin_url = NSC_BAR_PLUGIN_URL;
@@ -78,19 +81,22 @@ class nsc_bar_frontend
 
     public function nsc_bar_get_user_consent_values()
     {
-        $config_cookie_name = $this->plugin_configs->getConsentCookieName();
         $rawValues = $this->nsc_bar_get_dataLayer_banner_init_script(true);
 
+        // Banner 1 keys are "cookieconsent_status_<suffix>". Banner 2 (add-on) and keys added by filters are the plain ids: keep them.
+        $prefix = self::DATALAYER_STATUS_KEY . "_";
         $userSelects = array();
         foreach ($rawValues as $dlCookieName => $cookieValue) {
-            if ($dlCookieName === $config_cookie_name) {
+            if ($dlCookieName === self::DATALAYER_STATUS_KEY) {
                 $userSelects[] = $cookieValue;
                 continue;
             }
 
-            if ($cookieValue === "allow") {
-                $userSelects[] = str_replace($config_cookie_name . "_", "", $dlCookieName);
+            if ($cookieValue !== "allow") {
+                continue;
             }
+
+            $userSelects[] = strpos($dlCookieName, $prefix) === 0 ? substr($dlCookieName, strlen($prefix)) : $dlCookieName;
         }
         return $userSelects;
     }
@@ -126,7 +132,7 @@ class nsc_bar_frontend
         if (empty($returnValue)) {
             $this->dataLayerName = $nsc_bar_banner_config->nsc_bar_get_cookie_setting("dataLayerName", $this->plugin_configs->nsc_bar_return_settings_field_default_value("dataLayerName"));
             echo "<script id='nsc_bar_get_dataLayer_banner_init_script' nowprocket data-pagespeed-no-defer data-cfasync data-no-optimize='1' data-no-defer='1' type='text/javascript'>";
-            echo '!function(e,o,n,s){const c=' . json_encode($this->escape_cookies($cookies), JSON_UNESCAPED_UNICODE) . ',i="' . esc_js($this->dataLayerName) . '",t=Object.keys(c),a={event:"beautiful_cookie_consent_initialized"};for(let e=0;e<t.length;e++)a[t[e]]=d(t[e],"' . esc_js($this->compliance_type) . '")||c[t[e]].defaultValue,"dismiss"===a[t[e]]&&(a[t[e]]="allow");function d(e,o){if("newBanner"!==o)return l(e);let n=l("' . esc_js($this->getCookieName()) . '");return n?(n=decodeURIComponent(n),n?(n=JSON.parse(n),n?!0===n.categories.includes(e)?"allow":"deny":(console.warn("cookie not found 3"),!1)):(console.warn("cookie not found 2"),!1)):(console.warn("cookie not found 1"),!1)}function l(e){return document.cookie.match("(^|;)\\\s*"+e+"\\\s*=\\\s*([^;]+)")?.pop()||""}window[i]=window[i]||[],window[i].push(a)}();';
+            echo '!function(e,o,n,s){const c=' . json_encode($this->escape_cookies($cookies), JSON_UNESCAPED_UNICODE) . ',i="' . esc_js($this->dataLayerName) . '",t=Object.keys(c),a={event:"beautiful_cookie_consent_initialized"};for(let e=0;e<t.length;e++)a[t[e]]=d(t[e],"' . esc_js($this->compliance_type) . '")||c[t[e]].defaultValue,"dismiss"===a[t[e]]&&(a[t[e]]="allow");function d(e,o){if("newBanner"!==o)return l(c[e].cookieName||e);let n=l("' . esc_js($this->getCookieName()) . '");return n?(n=decodeURIComponent(n),n?(n=JSON.parse(n),n?!0===n.categories.includes(e)?"allow":"deny":(console.warn("cookie not found 3"),!1)):(console.warn("cookie not found 2"),!1)):(console.warn("cookie not found 1"),!1)}function l(e){return document.cookie.match("(^|;)\\\s*"+e+"\\\s*=\\\s*([^;]+)")?.pop()||""}window[i]=window[i]||[],window[i].push(a)}();';
             echo "</script>";
             return;
         }
@@ -157,15 +163,38 @@ class nsc_bar_frontend
         foreach ($cookies as $cookie_name => $cookie_values) {
             $escaped_cookies[esc_js($cookie_name)]["value"] = esc_js($cookie_values["value"]);
             $escaped_cookies[esc_js($cookie_name)]["defaultValue"] = esc_js($cookie_values["defaultValue"]);
+            $escaped_cookies[esc_js($cookie_name)]["cookieName"] = esc_js($this->get_browser_cookie_name($cookie_name));
         }
         return $escaped_cookies;
+    }
+
+    // The init script reads the consent again in the browser (page caches). The dataLayer keys are fixed,
+    // but the cookies are named after the configured cookie name: "<name>" and "<name>_<suffix>".
+    private function get_browser_cookie_name($dataLayerKey)
+    {
+        if ($dataLayerKey === self::DATALAYER_STATUS_KEY) {
+            return $this->getCookieName();
+        }
+
+        $prefix = self::DATALAYER_STATUS_KEY . "_";
+        if (strpos($dataLayerKey, $prefix) === 0) {
+            return $this->getCookieName() . "_" . substr($dataLayerKey, strlen($prefix));
+        }
+
+        // Entries added by filters keep reading the cookie with the key as name.
+        return $dataLayerKey;
     }
 
     public function nsc_bar_enqueue_scripts_osano()
     {
         wp_register_style('nsc_bar_nice-cookie-consent', $this->plugin_url . 'public/cookieNSCconsent.min.css', array(), NSC_BAR_PLUGIN_VERSION);
         if (!empty($this->customized_font)) {
-            wp_add_inline_style('nsc_bar_nice-cookie-consent', '.cc-window { font-family: ' . str_replace("&#039;", "'", esc_html($this->customized_font)) . '}');
+            // Revalidate old/imported/filter-provided settings at the CSS sink.
+            $validator = new nsc_bar_input_validation();
+            $font_family = $validator->nsc_bar_font_family($this->customized_font);
+            if ($font_family !== null && $font_family !== '') {
+                wp_add_inline_style('nsc_bar_nice-cookie-consent', '.cc-window { font-family: ' . $font_family . '; }');
+            }
         }
         wp_enqueue_style('nsc_bar_nice-cookie-consent');
 
@@ -249,7 +278,7 @@ class nsc_bar_frontend
         $cookieHandler = new nsc_bar_cookie_handler();
         $dataLayerEntries = array();
 
-        $dataLayerEntries["cookieconsent_status"] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($this->getCookieName()), "defaultValue" => $this->calculate_default_consent_setting());
+        $dataLayerEntries[self::DATALAYER_STATUS_KEY] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($this->getCookieName()), "defaultValue" => $this->calculate_default_consent_setting());
 
         if ($this->compliance_type !== "detailed" && $this->compliance_type !== "detailedRev" && $this->compliance_type !== "detailedRevDeny") {
             return $dataLayerEntries;
@@ -257,14 +286,14 @@ class nsc_bar_frontend
 
         // detailed consent area
 
-        if (empty($this->cookietypes)) {
-            return false;
+        if (empty($this->cookietypes) || !is_array($this->cookietypes)) {
+            return $dataLayerEntries;
         }
 
         $numberOfCookies = count($this->cookietypes);
         for ($i = 0; $i < $numberOfCookies; $i++) {
             $cookie_name = $this->getCookieName() . "_" . $this->cookietypes[$i]["cookie_suffix"];
-            $dataLayerEntries["cookieconsent_status_" . $this->cookietypes[$i]["cookie_suffix"]] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($cookie_name), "defaultValue" => $this->calculate_default_consent_setting($this->cookietypes[$i]));
+            $dataLayerEntries[self::DATALAYER_STATUS_KEY . "_" . $this->cookietypes[$i]["cookie_suffix"]] = array("value" => $cookieHandler->nsc_bar_get_cookies_by_name($cookie_name), "defaultValue" => $this->calculate_default_consent_setting($this->cookietypes[$i]));
         }
 
         return $dataLayerEntries;

@@ -121,12 +121,12 @@ class nsc_bar_admin_settings
     $timeStampJan2013 = 1356998400;
 
     $firstActivationTimestamp = get_option("nsc_bar_first_activation", $timeStampJan2013);
-    if ($this->timestampOlderThenDays($firstActivationTimestamp, 30) === false) {
+    if ($this->timestampOlderThenDays($firstActivationTimestamp, 5) === false) {
       return false;
     }
 
     $reviewLaterTimestamp = get_option("nsc_bar_intern_notice_review_later", 0);
-    if ($this->timestampOlderThenDays($reviewLaterTimestamp, 365) === false) {
+    if ($this->timestampOlderThenDays($reviewLaterTimestamp, 120) === false) {
       return false;
     }
 

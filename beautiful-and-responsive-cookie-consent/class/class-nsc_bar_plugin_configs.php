@@ -126,7 +126,7 @@ class nsc_bar_plugin_configs
     {
         $firstEntry = reset($array);
         if (is_array($firstEntry)) {
-            $this->getLastArrayEntry($firstEntry);
+            return $this->getLastArrayEntry($firstEntry);
         } else {
             return $firstEntry;
         }

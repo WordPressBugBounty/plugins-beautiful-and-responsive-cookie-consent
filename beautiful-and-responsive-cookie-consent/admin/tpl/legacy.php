@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH')) {
+  exit;
+}
+?>
 <span id="nsc_settings_content">
   <?php if ($displayReview === true) { ?>
     <div id="nsc_bar_notice_please_rate" class="nsc_bar_notice_below_tabs">

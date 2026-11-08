@@ -35,6 +35,10 @@ class nsc_bar_banner_configs
         if (empty($this->banner_config_array)) {
             $banner_config_array = $this->initialise_banner_configs();
             $banner_config_array = apply_filters('nsc_bar_filter_banner_config_array_init', $banner_config_array);
+            // Stored before validation existed or imported as JSON: an invalid name can put the page into a reload loop.
+            if (is_array($banner_config_array) && isset($banner_config_array["dataLayerName"]) && !nsc_bar_input_validation::nsc_bar_is_valid_datalayer_name($banner_config_array["dataLayerName"])) {
+                $banner_config_array["dataLayerName"] = "dataLayer";
+            }
             $this->banner_config_array = $banner_config_array;
         }
         return $this->banner_config_array;
@@ -217,6 +221,13 @@ class nsc_bar_banner_configs
 
         $banner_configs = json_decode($banner_config_string, true);
 
+        if (is_array($banner_configs) && array_key_exists("cookietypes", $banner_configs)) {
+            $banner_configs["cookietypes"] = $this->clean_cookietypes($banner_configs["cookietypes"]);
+            if ($banner_configs["cookietypes"] === null) {
+                unset($banner_configs["cookietypes"]);
+            }
+        }
+
         if (empty($banner_configs["content"]) === true) {
             return $banner_configs;
         }
@@ -234,6 +245,23 @@ class nsc_bar_banner_configs
         }
 
         return $banner_configs;
+    }
+
+    // A saved config can contain cookie types that are not a list (bad import, older versions). All callers loop over them and count() them.
+    // Returns null if there is nothing usable, so that the default of the caller is used.
+    private function clean_cookietypes($cookietypes)
+    {
+        if (!is_array($cookietypes)) {
+            return null;
+        }
+
+        $clean = array();
+        foreach ($cookietypes as $cookietype) {
+            if (is_array($cookietype) && isset($cookietype["cookie_suffix"]) && is_string($cookietype["cookie_suffix"]) && preg_match('/^[A-Za-z0-9_\-]+$/', $cookietype["cookie_suffix"]) === 1) {
+                $clean[] = $cookietype;
+            }
+        }
+        return $clean;
     }
 
     private function read_banner_configs_from_db_raw($slug)

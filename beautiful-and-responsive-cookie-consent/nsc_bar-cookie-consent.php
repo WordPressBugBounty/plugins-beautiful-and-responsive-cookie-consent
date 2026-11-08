@@ -3,10 +3,10 @@
 Plugin Name: Beautiful and responsive cookie consent
 Description: An easy way to get a beautiful GDPR Cookie Consent Banner. Customize it to match your compliance requirements and website layout. Highly customisable and responsive.
 Author: Beautiful Cookie Banner
-Version: 4.9.2
+Version: 4.10.0
 Author URI: https://beautiful-cookie-banner.com
 Plugin URI: https://beautiful-cookie-banner.com
-Text Domain: bar-cookie-consent
+Text Domain: beautiful-and-responsive-cookie-consent
 License:     GPLv3
 
 Beautiful and responsive cookie consent is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define("NSC_BAR_PLUGIN_DIR", dirname(__FILE__));
 define("NSC_BAR_PLUGIN_URL", plugin_dir_url(__FILE__));
-define("NSC_BAR_PLUGIN_VERSION", "4.9.2");
+define("NSC_BAR_PLUGIN_VERSION", "4.10.0");
 define("NSC_BAR_SLUG_DBVERSION", "nsc_bar_db_version");
 
 require dirname(__FILE__) . "/class/class-nsc_bar_admin_error.php";
@@ -103,7 +103,11 @@ function nsc_bar_do_frontend_actions()
         $nsc_bar_frontend_banner->nsc_bar_execute_frontend_wp_actions();
         add_filter('rocket_excluded_inline_js_content', array($nsc_bar_frontend_banner, 'nsc_bar_exclude_inline_scripts_from_caching'));
         add_filter('rocket_defer_inline_exclusions', array($nsc_bar_frontend_banner, 'nsc_bar_exclude_inline_scripts_from_caching'));
+        return;
     }
+
+    // Without the banner the link has nothing to open, but the shortcode must not be printed as raw text.
+    add_shortcode('cc_show_cookie_banner_nsc_bar', '__return_empty_string');
 }
 add_action("plugins_loaded", "nsc_bar_do_frontend_actions");
 

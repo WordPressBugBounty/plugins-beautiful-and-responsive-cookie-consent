@@ -25,16 +25,19 @@ class nsc_bar_cookie_handler
         ) {
             $expiryDate = $this->get_expiry_date($this->cookie_configs['name'], $this->cookie_configs['expirydays']);
 
-            if (isset($_COOKIE[$this->cookie_configs['name']])) {
+            if (isset($_COOKIE[$this->cookie_configs['name']]) && is_string($_COOKIE[$this->cookie_configs['name']])) {
                 $this->set_cookie($this->cookie_configs['name'], stripslashes($_COOKIE[$this->cookie_configs['name']]), $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure']);
                 $this->set_cookie("nsc_bar_cs_done", $this->cookie_configs['name'] . "---_---" . $expiryDate, $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure'], true);
             }
 
-            if (!empty($this->cookie_configs['cookietypes']) && !empty($cookietype_configs["cookie_suffix"])) {
+            if (!empty($this->cookie_configs['cookietypes'])) {
                 foreach ($this->cookie_configs['cookietypes'] as $cookietype_configs) {
+                    if (empty($cookietype_configs["cookie_suffix"])) {
+                        continue;
+                    }
                     $differentiatedCookieName = $this->cookie_configs['name'] . "_" . $cookietype_configs["cookie_suffix"];
-                    if (isset($_COOKIE[$differentiatedCookieName])) {
-                        $this->set_cookie($differentiatedCookieName, $_COOKIE[$differentiatedCookieName], $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure']);
+                    if (isset($_COOKIE[$differentiatedCookieName]) && is_string($_COOKIE[$differentiatedCookieName])) {
+                        $this->set_cookie($differentiatedCookieName, stripslashes($_COOKIE[$differentiatedCookieName]), $expiryDate, $this->cookie_configs['path'], $this->cookie_configs['domain'], $this->cookie_configs['secure']);
                     }
                 }
             }
@@ -236,7 +239,12 @@ class nsc_bar_cookie_handler
 
     private function get_expiry_date($cookiename, $expiryDays)
     {
-        $expiryDate = time() + 60 * 60 * 24 * $expiryDays;
+        // the setting is free text in old installations, 60*60*24*"abc" is a fatal error in PHP 8
+        $expiryDays = is_numeric($expiryDays) ? (int) $expiryDays : 0;
+        if ($expiryDays < 1) {
+            $expiryDays = 365;
+        }
+        $expiryDate = time() + 60 * 60 * 24 * min($expiryDays, 36500);
 
         if (!isset($_COOKIE["nsc_bar_cs_done"])) {
             return $expiryDate;
@@ -254,7 +262,12 @@ class nsc_bar_cookie_handler
             return $expiryDate;
         }
 
-        return $done_cookie_values[1];
+        // the value comes from a cookie of the visitor
+        if (ctype_digit($done_cookie_values[1]) === false) {
+            return $expiryDate;
+        }
+
+        return (int) $done_cookie_values[1];
     }
 
     private function get_banner_configs()
@@ -292,12 +305,22 @@ class nsc_bar_cookie_handler
         return $this->cookie_configs;
     }
 
-    private function set_cookie($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false)
+    // protected: tests record the cookies instead of sending them (php-cli drops headers)
+    protected function set_cookie($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false)
     {
 
         $cleanDomain = empty($domain) ? "." . parse_url(home_url(), PHP_URL_HOST) : "." . ltrim($domain, ".");
         if ($cleanDomain === ".") {
             $cleanDomain = "";
+        }
+
+        // setcookie() throws a ValueError in PHP 8 for these characters, which would be a fatal error on every page.
+        // Older installations may have such a value saved. The cookie is not set then, the banner works without the server side cookie.
+        if (!is_string($name) || $name === "" || preg_match('/[=,; \t\r\n\013\014]/', $name)) {
+            return;
+        }
+        if (preg_match('/[,; \t\r\n\013\014]/', $cleanDomain) || !is_string($path) || preg_match('/[,; \t\r\n\013\014]/', $path)) {
+            return;
         }
 
         if (version_compare(phpversion(), '7.3', '<')) {

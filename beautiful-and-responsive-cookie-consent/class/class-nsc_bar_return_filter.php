@@ -45,7 +45,12 @@ class nsc_bar_return_filter
         if (empty($this->banner_configs) === true) {
             $this->banner_configs = new nsc_bar_banner_configs;
         }
-        return $this->banner_configs->nsc_bar_get_cookie_setting($slug, $defaultValue);
+        // the banner config only knows settings up to three levels deep and throws for anything else. That must not be a fatal error for the caller of this public filter.
+        try {
+            return $this->banner_configs->nsc_bar_get_cookie_setting($slug, $defaultValue);
+        } catch (Exception $e) {
+            return $defaultValue;
+        }
     }
 
     public function nsc_bar_return_filter_user_consent_values()

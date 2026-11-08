@@ -41,7 +41,7 @@ class nsc_bar_admin_error
             $uniqueErrorTypes = array_unique($type);
             foreach ($uniqueErrorTypes as $error_message) {
                 echo '<div class="notice notice-error">
-                       <p>' . __($error_message, "nsc_bar_cookie_consent") . '</p>
+                       <p>' . wp_kses_post($error_message) . '</p>
                     </div>';
             }
         }
