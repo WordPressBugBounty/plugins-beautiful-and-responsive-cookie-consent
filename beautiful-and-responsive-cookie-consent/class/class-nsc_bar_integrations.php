@@ -21,13 +21,14 @@ class nsc_bar_integrations
 
     public function nsc_bar_wp_consent_api_consenttype($consenttype)
     {
+        // the WP Consent API only knows 'optin' and 'optout' (no hyphen), see wp_validate_consent_type()
         $consenttype = $this->banner_configs_obj->nsc_bar_get_cookie_setting('type', 'info');
         $optOut = array('opt-out', 'info');
 
         if (in_array($consenttype, $optOut)) {
-            return 'opt-out';
+            return 'optout';
         }
 
-        return 'opt-in';
+        return 'optin';
     }
 }

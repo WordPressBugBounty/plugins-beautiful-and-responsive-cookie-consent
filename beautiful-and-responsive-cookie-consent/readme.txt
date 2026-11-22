@@ -5,37 +5,44 @@ Donate link: https://www.paypal.me/nikelschubert/6.00EUR
 Tested up to: 7.1
 Requires PHP: 7.0.0
 License: GPLv3
-Stable tag: 4.10.0
+Stable tag: 4.11.0
 
 Free and beautiful Cookie Consent Banner to make your website compliant. Highly customizable and not loading any files from 3rd party servers.
 
 == Description ==
-A free and beautiful way to get a Cookie Banner without loading any external resources from 3rd parties. Customize it to match your compliance requirements and website layout. This Banner is super responsive and highly customizable. You want to make sure your banner always works? See here: [banner-test](https://beautiful-cookie-banner.com/articles/cookie-banner-test-monitor/). With paid add-on you get Google Consent Mode v2 support.
+**Beautiful Cookie Consent Banner** is a free, highly customizable cookie consent plugin for WordPress, with zero external dependencies.
 
-= Key Features =
+Create a cookie banner that perfectly matches your website. Customize colors, fonts, text, buttons, and layout without writing code. All banner resources are hosted directly on your WordPress site, with no external CDNs or third-party requests.
+Unlike cookie consent solutions that rely on external services, Beautiful Cookie Consent Banner runs independently on your own website, which might give you a privacy advantage.
 
-- fully customizable texts, colors, fonts and position of the banner and buttons.
-- support WP Consent API and other consent APIs.
-- Google Tag Manager dataLayer pushes
-- choose between different compliance types: Just Inform, Opt-in, Opt-out, Differentiated. Cookies will not be stored by default. With differentiated you can define cookie groups, and for each group a user can give a consent.
-- show the Banner until user accepts all cookies.
-- prevent user setting cookie from automatic deletion by many browsers (e.g. ITP => 2.1).
-- no resources loaded from third parties: **everything is hosted on your domain**.
-- developer friendly: filter hook to change cookie message: nsc_bar_cookie_bar_message
+= Key Features — Free =
 
-= Additional Features with paid add-on =
+- **Fully customizable:** Adjust colors, fonts, text, buttons, positioning, and appearance to match your website.
+- **Zero external dependencies:** No external CDNs or third-party requests from the cookie banner. Everything is served from your own domain.
+- **Flexible consent management:** Choose between information-only, opt-in, opt-out, and category-based consent.
+- **Responsive design:** Multiple banner layouts that adapt to desktop and mobile devices.
+- **Consent integrations:** Supports the WP Consent API and Google Tag Manager dataLayer events.
+- **Visitor preferences:** Allow visitors to review and change their cookie settings at any time.
+- **Developer-friendly:** Customization hooks, import/export functionality, and configurable cookie settings.
 
-- Google Consent Mode v2, including new ad_personalization and ad_user_data, see here: [Google Consent Mode v2 for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/google-consent-mode-v2-implementation-example/)
-- Microsoft UET consent mode support. [Microsoft UET consent mode for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/microsoft-uet-consent-mode-for-wordpress/)
-- Microsoft Clarity Consent API support. [Microsoft Clarity API support for WordPress](https://beautiful-cookie-banner.com/documentation/cookie-consent-premium-add-on-documentation/microsoft-clarity-consent-api-support-wordpress/)
-- Auto block scripts and requests
-- Multilanguage support
-- Full Google Tag Manager integration: load GTM through this plugin.
-- API for Settings
-- Consent statistics and logs
+= More Features with Premium =
 
-See the list of all features and get the add-on: [beautiful-cookie-banner.com](https://beautiful-cookie-banner.com/)
+Need advanced consent management? Extend the free plugin with optional Premium features:
 
+- **Google Consent Mode v2:** Integrate consent signals with Google Analytics and Google Ads.
+- **Automatic service blocking (beta):** Block supported services until visitors provide consent.
+- **Multilingual cookie banners:** Display your banner in different languages.
+- **Microsoft integrations:** Support for Microsoft Clarity Consent API and Microsoft UET Consent Mode.
+- **Consent statistics and logs:** Gain insights into visitor consent decisions.
+- **Advanced Google Tag Manager integration:** Load and configure GTM through the plugin.
+
+[Explore all Premium features](https://beautiful-cookie-banner.com/)
+
+= Privacy-Friendly by Design =
+
+Your cookie banner should respect your visitors' privacy without introducing unnecessary external dependencies.
+
+Beautiful Cookie Consent Banner loads its own resources directly from your website. There's no need for external hosting services or third-party CDNs just to display your banner.
 
 = These cookies are set by this plugin =
 
@@ -117,6 +124,12 @@ You can use the filter hook "nsc_bar_cookie_bar_message" in your plugin or theme
 Just install this plugin and go to Settings > Cookie Consent Banner to change the default config and to activate the banner.
 
 == Changelog ==
+
+= 4.11.0 =
+
+- FIX: WP Consent API - The consent type is now reported as "optin" / "optout" as the WP Consent API expects.
+- FIX: Updated outdated documentation links in the settings.
+- FIX: Corrected typos in the settings ("Clarity" and some help texts).
 
 = 4.10.0 =
 

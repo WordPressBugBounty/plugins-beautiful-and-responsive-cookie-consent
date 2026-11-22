@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
       </div>
     </div>
   <?php } ?>
-  <a href="https://beautiful-cookie-banner.com/articles/cookie-banner-test-monitor/" target="_blank"><img class="mb-2"
+  <a href="https://beautiful-cookie-banner.com/cookie-banner-test-monitor/" target="_blank"><img class="mb-2"
       width="280px" src="<?php echo NSC_BAR_PLUGIN_URL . 'admin/img/banner3.png' ?>" /></a>
   <div class="nsc_bar_info_box">
     <h3 class="fs-5">Share some love</h3>
